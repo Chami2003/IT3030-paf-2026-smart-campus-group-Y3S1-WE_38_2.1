@@ -1,6 +1,7 @@
 package com.smartcampus.backend.models;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -12,7 +13,10 @@ public class Ticket {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String title; // අලුතින් එකතු කළා
     private String category;
+    
+    @Column(length = 1000)
     private String description;
 
     @Enumerated(EnumType.STRING)
@@ -31,17 +35,18 @@ public class Ticket {
     @ElementCollection
     private List<String> attachmentUrls = new ArrayList<>();
 
-    // Enum Types
+    private LocalDateTime createdAt = LocalDateTime.now(); // SLA timer එකට අවශ්‍යයි
+
+    // --- Enum Types ---
     public enum Priority { LOW, MEDIUM, HIGH }
     public enum Status { OPEN, IN_PROGRESS, RESOLVED, CLOSED, REJECTED }
 
     // --- Constructors ---
+    public Ticket() {}
 
-    public Ticket() {
-    }
-
-    public Ticket(Long id, String category, String description, Priority priority, Status status, String location, String contactDetails, String assignedTechnicianId, String resolutionNotes, List<String> attachmentUrls) {
+    public Ticket(Long id, String title, String category, String description, Priority priority, Status status, String location, String contactDetails, String assignedTechnicianId, String resolutionNotes, List<String> attachmentUrls) {
         this.id = id;
+        this.title = title;
         this.category = category;
         this.description = description;
         this.priority = priority;
@@ -54,9 +59,11 @@ public class Ticket {
     }
 
     // --- Getters and Setters ---
-
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
+
+    public String getTitle() { return title; }
+    public void setTitle(String title) { this.title = title; }
 
     public String getCategory() { return category; }
     public void setCategory(String category) { this.category = category; }
@@ -84,4 +91,7 @@ public class Ticket {
 
     public List<String> getAttachmentUrls() { return attachmentUrls; }
     public void setAttachmentUrls(List<String> attachmentUrls) { this.attachmentUrls = attachmentUrls; }
+
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 }
