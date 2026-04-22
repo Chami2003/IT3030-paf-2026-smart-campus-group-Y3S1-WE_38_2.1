@@ -1,0 +1,53 @@
+# Git Ignore Configuration
+
+# IDE
+.vscode/
+.idea/
+*.iml
+*.iws
+*.ipr
+*.swp
+*.swo
+*~
+
+# Build directories
+/target/
+/build/
+dist/
+node_modules/
+
+# Dependencies
+.m2/
+package-lock.json
+yarn.lock
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Runtime
+.class
+*.jar
+*.war
+*.nar
+*.zip
+*.tar.gz
+*.rar
+
+# Frontend build
+frontend/build/
+frontend/.next/
+frontend/out/
+
+# Backend build
+backend/bin/
+backend/.gradle/
