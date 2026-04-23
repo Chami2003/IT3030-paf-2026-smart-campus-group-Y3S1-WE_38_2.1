@@ -5,7 +5,6 @@ const TicketList = () => {
     const [tickets, setTickets] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     
-    // Update කිරීමට අවශ්‍ය දත්ත තියාගන්න states
     const [selectedTicket, setSelectedTicket] = useState(null);
     const [newStatus, setNewStatus] = useState('');
     const [notes, setNotes] = useState('');
@@ -16,7 +15,6 @@ const TicketList = () => {
 
     const fetchTickets = async () => {
         try {
-            // Backend URL එක 8082 බව තහවුරු කරගන්න
             const response = await axios.get('http://localhost:8082/api/tickets');
             setTickets(response.data);
         } catch (error) {
@@ -68,7 +66,6 @@ const TicketList = () => {
         }
     };
 
-    // Filter logic එක ආරක්ෂිතව (Safe filtering)
     const filteredTickets = tickets.filter(t => {
         const title = t.title ? t.title.toLowerCase() : "";
         const search = searchTerm ? searchTerm.toLowerCase() : "";
@@ -94,6 +91,8 @@ const TicketList = () => {
                     <tr style={{ backgroundColor: '#333', color: 'white' }}>
                         <th style={{ padding: '12px', textAlign: 'left' }}>Title</th>
                         <th style={{ padding: '12px', textAlign: 'left' }}>Priority</th>
+                        {/* --- අලුතින් එකතු කළ Column එක --- */}
+                        <th style={{ padding: '12px', textAlign: 'left' }}>Images</th>
                         <th style={{ padding: '12px', textAlign: 'left' }}>Status</th>
                         <th style={{ padding: '12px', textAlign: 'center' }}>Actions</th>
                     </tr>
@@ -108,6 +107,27 @@ const TicketList = () => {
                                         {ticket.priority || "LOW"}
                                     </span>
                                 </td>
+                                
+                                {/* --- පින්තූර පෙන්වන කොටස --- */}
+                                <td style={{ padding: '12px' }}>
+                                    <div style={{ display: 'flex', gap: '5px' }}>
+                                        {ticket.attachmentUrls && ticket.attachmentUrls.length > 0 ? (
+                                            ticket.attachmentUrls.map((url, index) => (
+                                                <img 
+                                                    key={index} 
+                                                    src={`http://localhost:8082${url}`} 
+                                                    alt="attachment" 
+                                                    style={{ width: '40px', height: '40px', borderRadius: '4px', objectFit: 'cover', cursor: 'pointer', border: '1px solid #ddd' }} 
+                                                    onClick={() => window.open(`http://localhost:8082${url}`, '_blank')}
+                                                    title="Click to view full image"
+                                                />
+                                            ))
+                                        ) : (
+                                            <span style={{ color: '#ccc', fontSize: '12px' }}>No Images</span>
+                                        )}
+                                    </div>
+                                </td>
+
                                 <td style={{ padding: '12px', fontWeight: 'bold', color: ticket.status === 'RESOLVED' ? '#28a745' : '#007bff' }}>
                                     {ticket.status}
                                 </td>
@@ -119,7 +139,7 @@ const TicketList = () => {
                         ))
                     ) : (
                         <tr>
-                            <td colSpan="4" style={{ padding: '20px', textAlign: 'center', color: '#888' }}>No tickets found.</td>
+                            <td colSpan="5" style={{ padding: '20px', textAlign: 'center', color: '#888' }}>No tickets found.</td>
                         </tr>
                     )}
                 </tbody>
