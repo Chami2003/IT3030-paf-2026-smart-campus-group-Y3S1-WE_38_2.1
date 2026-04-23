@@ -5,6 +5,7 @@ import com.smartcampus.backend.services.TicketService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:5173")
@@ -15,10 +16,14 @@ public class TicketController {
     @Autowired
     private TicketService ticketService;
 
-    // 1. Create Ticket (POST)
-    @PostMapping
-    public Ticket create(@RequestBody Ticket ticket) {
-        return ticketService.createTicket(ticket);
+    // 1. Create Ticket with Images (POST)
+    // Consumes multipart/form-data භාවිතා කර පින්තූර සහ දත්ත භාර ගනී
+    @PostMapping(consumes = {"multipart/form-data"})
+    public Ticket create(
+        @RequestPart("ticket") Ticket ticket, 
+        @RequestPart(value = "images", required = false) List<MultipartFile> images
+    ) {
+        return ticketService.createTicket(ticket, images);
     }
 
     // 2. Get All Tickets (GET)
@@ -28,21 +33,20 @@ public class TicketController {
     }
 
     // 3. Update Ticket - Technician Updates (PUT)
-    // මේකෙන් status, resolution notes සහ technician id ඔක්කොම update කරන්න පුළුවන්
     @PutMapping("/{id}")
     public ResponseEntity<Ticket> updateTicket(@PathVariable Long id, @RequestBody Ticket ticketDetails) {
         Ticket updatedTicket = ticketService.updateTicketDetails(id, ticketDetails);
         return ResponseEntity.ok(updatedTicket);
     }
 
-    // 4. Delete Ticket (DELETE) - Assignment requirement එකක්
+    // 4. Delete Ticket (DELETE)
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTicket(@PathVariable Long id) {
         ticketService.deleteTicket(id);
         return ResponseEntity.noContent().build();
     }
     
-    // අවශ්‍ය නම් Status එක විතරක් update කරන්නත් පුළුවන් (Optional)
+    // Optional: Update Status Only
     @PatchMapping("/{id}/status")
     public Ticket updateStatus(@PathVariable Long id, @RequestParam Ticket.Status status) {
         return ticketService.updateTicketStatus(id, status);
