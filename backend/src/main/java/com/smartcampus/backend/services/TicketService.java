@@ -26,14 +26,16 @@ public class TicketService {
         List<String> savedImageUrls = new ArrayList<>();
 
         if (images != null && !images.isEmpty()) {
-            String uploadDir = System.getProperty("user.dir") + File.separator + "uploads" + File.separator; 
-            
+            Path uploadPath = Paths.get("uploads").toAbsolutePath().normalize();
+            if (!Files.exists(uploadPath)) {
+                uploadPath = Paths.get("backend", "uploads").toAbsolutePath().normalize();
+            }
+
             try {
-                Path uploadPath = Paths.get(uploadDir);
                 if (!Files.exists(uploadPath)) {
                     Files.createDirectories(uploadPath);
                 }
-                
+
                 for (MultipartFile image : images) {
                     if (!image.isEmpty()) {
                         String fileName = UUID.randomUUID().toString() + "_" + image.getOriginalFilename();
