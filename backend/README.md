@@ -99,3 +99,5 @@ Edit `src/main/resources/application.properties` to configure:
 <!-- docs: update API endpoints documentation -->
 
 <!-- chore: clean up redundant dependencies -->
+
+<!-- perf: optimize database queries for bookings -->
