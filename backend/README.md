@@ -93,3 +93,5 @@ Edit `src/main/resources/application.properties` to configure:
 <!-- refactor: restructure backend modules -->
 
 <!-- fix: resolve OAuth token expiry issue -->
+
+<!-- style: update CSS variables for dashboard -->
