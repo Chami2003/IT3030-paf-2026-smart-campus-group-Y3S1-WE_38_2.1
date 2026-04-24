@@ -107,3 +107,5 @@ Edit `src/main/resources/application.properties` to configure:
 <!-- ci: update GitHub actions workflow -->
 
 <!-- fix: resolve UI overlap in ticket form -->
+
+<!-- feat: add resource filtering capability -->
