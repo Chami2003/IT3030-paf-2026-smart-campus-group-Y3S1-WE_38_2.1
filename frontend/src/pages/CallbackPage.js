@@ -9,7 +9,7 @@ function CallbackPage() {
     const token = searchParams.get('token');
     
     if (token) {
-      fetch('http://localhost:8081/api/auth/me', {
+      fetch('http://localhost:8080/api/auth/me', {
         headers: {
           'Authorization': `Bearer ${token}`
         }

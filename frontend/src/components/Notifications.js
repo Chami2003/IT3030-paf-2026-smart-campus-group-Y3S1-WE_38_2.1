@@ -12,7 +12,7 @@ const Notifications = () => {
   const fetchNotifications = async () => {
     try {
       const token = localStorage.getItem('jwtToken');
-      const response = await fetch('http://localhost:8081/api/notifications/me', {
+      const response = await fetch('http://localhost:8080/api/notifications/me', {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -31,7 +31,7 @@ const Notifications = () => {
   const markAsRead = async (id) => {
     try {
       const token = localStorage.getItem('jwtToken');
-      const response = await fetch(`http://localhost:8081/api/notifications/${id}/read`, {
+      const response = await fetch(`http://localhost:8080/api/notifications/${id}/read`, {
         method: 'PATCH',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -50,7 +50,7 @@ const Notifications = () => {
   const deleteNotification = async (id) => {
     try {
       const token = localStorage.getItem('jwtToken');
-      const response = await fetch(`http://localhost:8081/api/notifications/${id}`, {
+      const response = await fetch(`http://localhost:8080/api/notifications/${id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`

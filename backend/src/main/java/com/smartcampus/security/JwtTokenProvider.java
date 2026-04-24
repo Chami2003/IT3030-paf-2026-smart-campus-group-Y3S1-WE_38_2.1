@@ -29,7 +29,7 @@ public class JwtTokenProvider {
                     .claim("roles", roles)
                     .setIssuedAt(now)
                     .setExpiration(expiryDate)
-                    .signWith(SignatureAlgorithm.HS512, jwtSecret)
+                    .signWith(io.jsonwebtoken.security.Keys.hmacShaKeyFor(jwtSecret.getBytes()), SignatureAlgorithm.HS512)
                     .compact();
         } catch (JwtException e) {
             log.error("Failed to generate JWT token", e);
@@ -40,7 +40,7 @@ public class JwtTokenProvider {
     public String getEmailFromToken(String token) {
         try {
             Claims claims = Jwts.parser()
-                    .setSigningKey(jwtSecret)
+                    .setSigningKey(io.jsonwebtoken.security.Keys.hmacShaKeyFor(jwtSecret.getBytes()))
                     .parseClaimsJws(token)
                     .getBody();
             return claims.getSubject();
@@ -54,7 +54,7 @@ public class JwtTokenProvider {
     public Set<String> getRolesFromToken(String token) {
         try {
             Claims claims = Jwts.parser()
-                    .setSigningKey(jwtSecret)
+                    .setSigningKey(io.jsonwebtoken.security.Keys.hmacShaKeyFor(jwtSecret.getBytes()))
                     .parseClaimsJws(token)
                     .getBody();
             return (Set<String>) claims.get("roles", Set.class);
@@ -66,7 +66,7 @@ public class JwtTokenProvider {
 
     public boolean validateToken(String token) {
         try {
-            Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token);
+            Jwts.parser().setSigningKey(io.jsonwebtoken.security.Keys.hmacShaKeyFor(jwtSecret.getBytes())).parseClaimsJws(token);
             return true;
         } catch (SecurityException e) {
             log.error("Invalid JWT signature", e);

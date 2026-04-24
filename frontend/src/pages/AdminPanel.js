@@ -9,7 +9,7 @@ function AdminPanel({ user, onLogout }) {
   const fetchUsers = useCallback(async () => {
     try {
       setLoading(true);
-      const response = await fetch('http://localhost:8081/api/admin/users', {
+      const response = await fetch('http://localhost:8080/api/admin/users', {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -34,7 +34,7 @@ function AdminPanel({ user, onLogout }) {
 
   const updateUserRole = async (userId, role) => {
     try {
-      const response = await fetch(`http://localhost:8081/api/auth/${userId}/role?role=${role}`, {
+      const response = await fetch(`http://localhost:8080/api/auth/${userId}/role?role=${role}`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -56,7 +56,7 @@ function AdminPanel({ user, onLogout }) {
   const deleteUser = async (userId) => {
     if (window.confirm('Are you sure you want to delete this user?')) {
       try {
-        const response = await fetch(`http://localhost:8081/api/auth/${userId}`, {
+        const response = await fetch(`http://localhost:8080/api/auth/${userId}`, {
           method: 'DELETE',
           headers: {
             'Authorization': `Bearer ${token}`

@@ -20,7 +20,7 @@ function App() {
     const token = localStorage.getItem('jwtToken');
     if (token) {
       try {
-        const response = await fetch('http://localhost:8081/api/auth/verify', {
+        const response = await fetch('http://localhost:8080/api/auth/verify', {
           headers: {
             'Authorization': `Bearer ${token}`
           }
