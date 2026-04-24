@@ -101,3 +101,5 @@ Edit `src/main/resources/application.properties` to configure:
 <!-- chore: clean up redundant dependencies -->
 
 <!-- perf: optimize database queries for bookings -->
+
+<!-- test: add unit tests for notification service -->
