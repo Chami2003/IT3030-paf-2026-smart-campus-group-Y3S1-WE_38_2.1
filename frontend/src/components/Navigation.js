@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 
 /**
  * Sidebar Navigation component for the Smart Campus dashboard.
@@ -11,7 +12,8 @@ const Navigation = ({ isAuthenticated }) => {
     setIsMenuOpen(!isMenuOpen);
   };
 
-  const currentPath = window.location.pathname;
+  const location = useLocation();
+  const currentPath = location.pathname;
 
   return (
     <nav className={`main-nav ${isMenuOpen ? 'nav-open' : ''}`}>

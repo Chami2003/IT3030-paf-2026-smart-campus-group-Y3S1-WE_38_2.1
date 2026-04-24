@@ -5,6 +5,7 @@ import Header from './components/Header';
 import ResourceCatalogue from './components/ResourceCatalogue';
 import ResourceAnalytics from './components/ResourceAnalytics';
 import NotificationCenter from './components/NotificationCenter';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -49,27 +50,28 @@ function App() {
   }
 
   return (
-    <div className="App">
-      <ToastContainer position="top-right" autoClose={5000} theme="light" />
-      <Header user={user} isAuthenticated={isAuthenticated} onLogout={handleLogout} />
+    <BrowserRouter>
+      <div className="App">
+        <ToastContainer position="top-right" autoClose={5000} theme="light" />
+        <Header user={user} isAuthenticated={isAuthenticated} onLogout={handleLogout} />
       <Navigation isAuthenticated={isAuthenticated} />
       <main className="main-content">
         {/* Routes will be defined here */}
         <div className="container">
           {isAuthenticated ? (
             <div className="dashboard">
-              {window.location.pathname === '/resources' ? (
-                <ResourceCatalogue />
-              ) : window.location.pathname === '/analytics' ? (
-                <ResourceAnalytics />
-              ) : window.location.pathname === '/notifications' ? (
-                <NotificationCenter />
-              ) : (
-                <>
-                  <h1>Welcome to Smart Campus</h1>
-                  <p>Select an option from the navigation menu</p>
-                </>
-              )}
+              <Routes>
+                <Route path="/resources" element={<ResourceCatalogue />} />
+                <Route path="/analytics" element={<ResourceAnalytics />} />
+                <Route path="/notifications" element={<NotificationCenter />} />
+                <Route path="/" element={
+                  <>
+                    <h1>Welcome to Smart Campus</h1>
+                    <p>Select an option from the navigation menu</p>
+                  </>
+                } />
+                <Route path="*" element={<Navigate to="/" replace />} />
+              </Routes>
             </div>
           ) : (
             <div className="login-page">
@@ -95,9 +97,10 @@ function App() {
         </div>
       </main>
       <footer className="app-footer">
-        <p>&copy; 2026 Smart Campus - IT3030 PAF Group Y3S1-WE_38</p>
+        <p>&copy; 2026 Smart Campus Management System</p>
       </footer>
-    </div>
+      </div>
+    </BrowserRouter>
   );
 }
 

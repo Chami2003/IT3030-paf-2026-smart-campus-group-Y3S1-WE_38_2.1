@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { resourceAPI } from '../services/api';
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 import './ResourceCatalogue.css';
 
 /**
@@ -9,6 +10,7 @@ import './ResourceCatalogue.css';
  * styled with the dark dashboard theme.
  */
 const ResourceForm = ({ resource, onClose, onSave }) => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: '',
     type: 'LECTURE_HALL',
@@ -82,7 +84,28 @@ const ResourceForm = ({ resource, onClose, onSave }) => {
       
       // Trigger toast if status is OUT_OF_SERVICE
       if (formData.status === 'OUT_OF_SERVICE') {
-        toast.error(`⚠️ ${formData.name} marked as OUT OF SERVICE!`);
+        toast.warn(
+          <div>
+            <div style={{ marginBottom: '8px', fontWeight: '600' }}>
+              ⚠️ {formData.name} marked as OUT OF SERVICE!
+            </div>
+            <button 
+              onClick={(e) => {
+                e.stopPropagation(); // prevent toast from closing if it has closeOnClick
+                navigate('/notifications');
+                onClose(); // close the modal as well
+              }}
+              style={{
+                padding: '6px 12px', background: 'var(--accent-red)', 
+                color: 'white', border: 'none', borderRadius: '4px', 
+                cursor: 'pointer', fontWeight: 'bold', fontSize: '0.8rem'
+              }}
+            >
+              View Details
+            </button>
+          </div>,
+          { autoClose: 6000 }
+        );
       } else {
         toast.success(`✅ ${formData.name} saved successfully!`);
       }
