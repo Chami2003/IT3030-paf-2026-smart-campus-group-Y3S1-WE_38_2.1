@@ -1,0 +1,256 @@
+{
+	"info": {
+		"_postman_id": "06e68d83-4a18-4796-9f7a-8ae868351052",
+		"name": "Smart Campus Booking API",
+		"description": "API collection for the Smart Campus Operations Hub Booking Module (IT3030)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create Booking - Success",
+			"request": {
+				"method": "POST",
+				"header": [
+					{ "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+					{ "key": "Content-Type", "value": "application/json", "type": "text" }
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"resourceId\": 1,\n    \"bookingDate\": \"2026-05-01\",\n    \"startTime\": \"10:00:00\",\n    \"endTime\": \"12:00:00\",\n    \"purpose\": \"Team Brainstorming\",\n    \"expectedAttendees\": 5\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/v1/bookings",
+					"host": ["{{base_url}}"],
+					"path": ["api", "v1", "bookings"]
+				}
+			},
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": ["pm.test('Status is 201 Created', () => pm.response.to.have.status(201));"]
+					}
+				}
+			]
+		},
+		{
+			"name": "Create Booking - Conflict (409)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{ "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+					{ "key": "Content-Type", "value": "application/json", "type": "text" }
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"resourceId\": 1,\n    \"bookingDate\": \"2026-05-01\",\n    \"startTime\": \"11:00:00\",\n    \"endTime\": \"13:00:00\",\n    \"purpose\": \"Conflicting Meeting\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/v1/bookings",
+					"host": ["{{base_url}}"],
+					"path": ["api", "v1", "bookings"]
+				}
+			},
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": ["pm.test('Status is 409 Conflict', () => pm.response.to.have.status(409));"]
+					}
+				}
+			]
+		},
+		{
+			"name": "Create Booking - Invalid Body (400)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{ "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+					{ "key": "Content-Type", "value": "application/json", "type": "text" }
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"resourceId\": null,\n    \"purpose\": \"\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/v1/bookings",
+					"host": ["{{base_url}}"],
+					"path": ["api", "v1", "bookings"]
+				}
+			},
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": ["pm.test('Status is 400 Bad Request', () => pm.response.to.have.status(400));"]
+					}
+				}
+			]
+		},
+		{
+			"name": "Get My Bookings",
+			"request": {
+				"method": "GET",
+				"header": [
+					{ "key": "Authorization", "value": "Bearer {{token}}", "type": "text" }
+				],
+				"url": {
+					"raw": "{{base_url}}/api/v1/bookings/my",
+					"host": ["{{base_url}}"],
+					"path": ["api", "v1", "bookings", "my"]
+				}
+			},
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": ["pm.test('Status is 200 OK', () => pm.response.to.have.status(200));"]
+					}
+				}
+			]
+		},
+		{
+			"name": "Get Booking By ID",
+			"request": {
+				"method": "GET",
+				"header": [
+					{ "key": "Authorization", "value": "Bearer {{token}}", "type": "text" }
+				],
+				"url": {
+					"raw": "{{base_url}}/api/v1/bookings/1",
+					"host": ["{{base_url}}"],
+					"path": ["api", "v1", "bookings", "1"]
+				}
+			},
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": ["pm.test('Status is 200 OK or 404', () => pm.expect(pm.response.code).to.be.oneOf([200, 404]));"]
+					}
+				}
+			]
+		},
+		{
+			"name": "Admin - Get All Bookings (Filtered)",
+			"request": {
+				"method": "GET",
+				"header": [
+					{ "key": "Authorization", "value": "Bearer {{token}}", "type": "text" }
+				],
+				"url": {
+					"raw": "{{base_url}}/api/v1/bookings?status=PENDING",
+					"host": ["{{base_url}}"],
+					"path": ["api", "v1", "bookings"],
+					"query": [{ "key": "status", "value": "PENDING" }]
+				}
+			},
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": ["pm.test('Status is 200 OK', () => pm.response.to.have.status(200));"]
+					}
+				}
+			]
+		},
+		{
+			"name": "Admin - Approve Booking",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{ "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+					{ "key": "Content-Type", "value": "application/json", "type": "text" }
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"status\": \"APPROVED\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/v1/bookings/1/status",
+					"host": ["{{base_url}}"],
+					"path": ["api", "v1", "bookings", "1", "status"]
+				}
+			},
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": ["pm.test('Status is 200 OK', () => pm.response.to.have.status(200));"]
+					}
+				}
+			]
+		},
+		{
+			"name": "Admin - Reject Booking",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{ "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+					{ "key": "Content-Type", "value": "application/json", "type": "text" }
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"status\": \"REJECTED\",\n    \"rejectionReason\": \"Resource under maintenance during requested slot.\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/v1/bookings/1/status",
+					"host": ["{{base_url}}"],
+					"path": ["api", "v1", "bookings", "1", "status"]
+				}
+			},
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": ["pm.test('Status is 200 OK', () => pm.response.to.have.status(200));"]
+					}
+				}
+			]
+		},
+		{
+			"name": "User - Cancel Own Booking",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{ "key": "Authorization", "value": "Bearer {{token}}", "type": "text" }
+				],
+				"url": {
+					"raw": "{{base_url}}/api/v1/bookings/1/cancel",
+					"host": ["{{base_url}}"],
+					"path": ["api", "v1", "bookings", "1", "cancel"]
+				}
+			},
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": ["pm.test('Status is 200 OK', () => pm.response.to.have.status(200));"]
+					}
+				}
+			]
+		},
+		{
+			"name": "Admin - Delete Booking (Hard Delete)",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{ "key": "Authorization", "value": "Bearer {{token}}", "type": "text" }
+				],
+				"url": {
+					"raw": "{{base_url}}/api/v1/bookings/1",
+					"host": ["{{base_url}}"],
+					"path": ["api", "v1", "bookings", "1"]
+				}
+			},
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": ["pm.test('Status is 204 No Content', () => pm.response.to.have.status(204));"]
+					}
+				}
+			]
+		}
+	]
+}

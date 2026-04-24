@@ -14,7 +14,7 @@ const apiClient = axios.create({
 
 apiClient.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('jwtToken');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -30,7 +30,7 @@ apiClient.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
 
-      localStorage.removeItem('token');
+      localStorage.removeItem('jwtToken');
       window.location.href = '/login';
     }
     return Promise.reject(error);
@@ -42,7 +42,7 @@ export const authAPI = {
   login: (email, password) => apiClient.post('/auth/login', { email, password }),
   register: (userData) => apiClient.post('/auth/register', userData),
   logout: () => {
-    localStorage.removeItem('token');
+    localStorage.removeItem('jwtToken');
     return Promise.resolve();
   },
 };
@@ -54,6 +54,15 @@ export const userAPI = {
   updateProfile: (userId, userData) => apiClient.put(`/users/${userId}`, userData),
 };
 
+
+export const resourceAPI = {
+  getAllResources: () => apiClient.get('/resources'),
+  getResourceById: (id) => apiClient.get(`/resources/${id}`),
+  searchResources: (params) => apiClient.get('/resources/search', { params }),
+  createResource: (resourceData) => apiClient.post('/resources', resourceData),
+  updateResource: (id, resourceData) => apiClient.put(`/resources/${id}`, resourceData),
+  deleteResource: (id) => apiClient.delete(`/resources/${id}`),
+};
 
 export const facilityAPI = {
   getAllFacilities: () => apiClient.get('/facilities'),

@@ -1,0 +1,427 @@
+/* ============================================
+   SMART CAMPUS — App Layout & Core Components
+   Premium dark dashboard with glow effects
+   ============================================ */
+
+/* ---------- App Shell ---------- */
+.App {
+  display: flex;
+  min-height: 100vh;
+  background: var(--bg-primary);
+}
+
+/* =============================================
+   SIDEBAR NAVIGATION
+   ============================================= */
+.main-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: var(--sidebar-width);
+  height: 100vh;
+  background: var(--gradient-sidebar);
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  z-index: 100;
+  transition: transform var(--transition-normal);
+  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.2);
+}
+
+/* Sidebar brand */
+.sidebar-brand {
+  padding: 1.5rem 1.5rem 1.25rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-brand h2 {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.sidebar-brand h2::before {
+  content: '';
+  -webkit-text-fill-color: initial;
+}
+
+.sidebar-brand .brand-sub {
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.5);
+  font-weight: 400;
+  margin-top: 3px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* Mobile toggle */
+.menu-toggle {
+  display: none;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 0.6rem 1rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* Nav links */
+.nav-menu {
+  padding: 1rem 0;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.nav-menu li {
+  margin: 3px 0.65rem;
+}
+
+.nav-menu li a {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.75rem 1.1rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.855rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.65);
+  transition: all var(--transition-normal);
+  border-left: 3px solid transparent;
+  position: relative;
+}
+
+.nav-menu li a:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateX(2px);
+}
+
+.nav-menu li a.active {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.12);
+  border-left-color: #60a5fa;
+  font-weight: 600;
+}
+
+.nav-menu li a.active::after {
+  content: '';
+  position: absolute;
+  right: 0.75rem;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #60a5fa;
+  box-shadow: 0 0 8px #60a5fa;
+}
+
+.nav-icon {
+  font-size: 1.1rem;
+  width: 22px;
+  text-align: center;
+}
+
+/* =============================================
+   TOP HEADER BAR
+   ============================================= */
+.app-header {
+  position: fixed;
+  top: 0;
+  left: var(--sidebar-width);
+  right: 0;
+  height: var(--header-height);
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  padding: 0 2rem;
+  z-index: 99;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.header-content .logo {
+  display: flex;
+  flex-direction: column;
+}
+
+.header-content .logo h1 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-heading);
+  letter-spacing: -0.01em;
+}
+
+.header-content .logo .header-subtitle {
+  font-size: 0.73rem;
+  color: var(--text-muted);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.user-info>span {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+/* Notification bell */
+.notification-bell {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  color: var(--text-secondary);
+  transition: all var(--transition-normal);
+  cursor: pointer;
+  position: relative;
+}
+
+.notification-bell:hover {
+  background: var(--bg-card-hover);
+  color: var(--accent-gold);
+  border-color: var(--accent-gold-glow);
+  box-shadow: 0 0 16px var(--accent-gold-glow);
+}
+
+/* User badge */
+.user-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.3rem 0.85rem;
+  border-radius: 9999px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  background: var(--accent-blue-glow);
+  color: var(--accent-blue);
+  border: 1px solid rgba(79, 143, 247, 0.2);
+}
+
+/* User avatar */
+.user-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--gradient-blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: white;
+  box-shadow: 0 2px 12px rgba(79, 143, 247, 0.25);
+  overflow: hidden;
+}
+ 
+.user-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatar-wrapper {
+  position: relative;
+  display: inline-flex;
+}
+
+.status-indicator {
+  position: absolute;
+  bottom: 0;
+  right: -2px;
+  width: 12px;
+  height: 12px;
+  background-color: var(--accent-green);
+  border: 2px solid white;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.05);
+}
+
+/* Logout button */
+.logout-btn {
+  background: transparent;
+  border: 1px solid var(--border-light);
+  color: var(--text-secondary);
+  padding: 0.45rem 1.1rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.78rem;
+  font-weight: 600;
+  transition: all var(--transition-normal);
+  letter-spacing: 0.02em;
+}
+
+.logout-btn:hover {
+  background: var(--accent-red-bg);
+  color: var(--accent-red);
+  border-color: rgba(248, 113, 113, 0.3);
+  box-shadow: 0 0 16px var(--accent-red-bg);
+}
+
+.guest-info span {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+/* =============================================
+   MAIN CONTENT AREA
+   ============================================= */
+.main-content {
+  margin-left: var(--sidebar-width);
+  margin-top: var(--header-height);
+  flex: 1;
+  min-height: calc(100vh - var(--header-height));
+  padding: 2rem 2.5rem;
+  background: var(--bg-primary);
+}
+
+.container {
+  width: 100%;
+  margin: 0;
+}
+
+/* ---------- Dashboard Welcome ---------- */
+.dashboard {
+  width: 100%;
+}
+
+.dashboard>h1 {
+  font-size: 1.85rem;
+  font-weight: 800;
+  color: var(--text-heading);
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
+}
+
+.dashboard>p {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+/* ---------- Login Page ---------- */
+.login-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  text-align: center;
+}
+
+.login-page h1 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--accent-blue);
+  margin-bottom: 0.75rem;
+  letter-spacing: -0.02em;
+}
+
+.login-page p {
+  color: var(--text-secondary);
+  margin-bottom: 2rem;
+  font-size: 1rem;
+}
+
+.login-page button {
+  background: var(--gradient-blue) !important;
+  color: white !important;
+  border: none !important;
+  padding: 0.9rem 3rem !important;
+  border-radius: var(--radius-md) !important;
+  font-weight: 700 !important;
+  font-size: 0.95rem !important;
+  transition: all var(--transition-normal) !important;
+  box-shadow: 0 4px 24px rgba(79, 143, 247, 0.3) !important;
+  letter-spacing: 0.02em !important;
+}
+
+.login-page button:hover {
+  transform: translateY(-3px) !important;
+  box-shadow: 0 8px 36px rgba(79, 143, 247, 0.45) !important;
+}
+
+/* ---------- Loading ---------- */
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  background: var(--bg-primary);
+}
+
+/* ---------- Footer ---------- */
+.app-footer {
+  margin-left: var(--sidebar-width);
+  padding: 1.25rem 2rem;
+  text-align: center;
+  border-top: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+}
+
+.app-footer p {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  letter-spacing: 0.02em;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 768px) {
+  .main-nav {
+    transform: translateX(-100%);
+  }
+
+  .main-nav.nav-open {
+    transform: translateX(0);
+  }
+
+  .menu-toggle {
+    display: block;
+    position: fixed;
+    top: 0.75rem;
+    left: 0.75rem;
+    z-index: 200;
+  }
+
+  .app-header {
+    left: 0;
+    padding-left: 4rem;
+  }
+
+  .main-content {
+    margin-left: 0;
+    padding: 1.5rem;
+  }
+
+  .app-footer {
+    margin-left: 0;
+  }
+}

@@ -1,0 +1,179 @@
+/* ============================================
+   SMART CAMPUS — Unified Premium Design System
+   ============================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+/* ---------- CSS Custom Properties ---------- */
+:root {
+  /* Core palette — clean white & light grey */
+  --bg-primary: #f0f4f8;
+  --bg-secondary: #ffffff;
+  --bg-sidebar: #1e3a5f;
+  --bg-card: #ffffff;
+  --bg-card-hover: #f7f9fc;
+  --bg-input: #f4f7fb;
+  --bg-table-header: #f0f4f8;
+  --bg-table-row-hover: #f5f8fc;
+
+  /* Borders */
+  --border-color: #e2e8f0;
+  --border-light: #cbd5e1;
+  --border-glow: rgba(37, 99, 235, 0.15);
+
+  /* Text hierarchy */
+  --text-primary: #1e293b;
+  --text-secondary: #64748b;
+  --text-muted: #94a3b8;
+  --text-heading: #0f172a;
+
+  /* Accent colours — vibrant blue family */
+  --accent-blue: #2563eb;
+  --accent-blue-hover: #1d4ed8;
+  --accent-blue-glow: rgba(37, 99, 235, 0.1);
+  --accent-purple: #7c3aed;
+  --accent-purple-glow: rgba(124, 58, 237, 0.08);
+  --accent-gold: #f59e0b;
+  --accent-gold-hover: #d97706;
+  --accent-gold-glow: rgba(245, 158, 11, 0.1);
+  --accent-green: #059669;
+  --accent-green-dark: #047857;
+  --accent-green-bg: rgba(5, 150, 105, 0.08);
+  --accent-red: #dc2626;
+  --accent-red-dark: #b91c1c;
+  --accent-red-bg: rgba(220, 38, 38, 0.06);
+  --accent-cyan: #0891b2;
+  --accent-teal: #0d9488;
+
+  /* Gradients */
+  --gradient-blue: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+  --gradient-purple: linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%);
+  --gradient-green: linear-gradient(135deg, #059669 0%, #10b981 100%);
+  --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+  --gradient-card: linear-gradient(145deg, #ffffff 0%, #fafbfd 100%);
+  --gradient-sidebar: linear-gradient(180deg, #1e3a5f 0%, #1a3355 50%, #162d4d 100%);
+
+  /* Sidebar — deep blue for contrast */
+  --sidebar-width: 240px;
+  --sidebar-active-bg: rgba(255, 255, 255, 0.1);
+  --sidebar-active-border: #60a5fa;
+
+  /* Header */
+  --header-height: 68px;
+
+  /* Radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-2xl: 24px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-card: 0 4px 16px rgba(0, 0, 0, 0.06);
+  --shadow-card-hover: 0 8px 30px rgba(0, 0, 0, 0.1);
+  --shadow-modal: 0 24px 48px rgba(0, 0, 0, 0.15);
+  --shadow-glow-blue: 0 0 16px rgba(37, 99, 235, 0.1);
+  --shadow-glow-green: 0 0 16px rgba(5, 150, 105, 0.1);
+
+  /* Transitions */
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-smooth: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Booking Specific Tokens */
+  --primary-600: #2563eb;
+  --primary-700: #1d4ed8;
+}
+
+/* ---------- Reset & Base ---------- */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul, ol {
+  list-style: none;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+input, select, textarea {
+  font-family: inherit;
+}
+
+/* ---------- Components (Tailwind Backports) ---------- */
+.glass-card {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: var(--shadow-card);
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.65rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border: 1px solid transparent;
+}
+
+.status-pending { background: #fefce8; color: #a16207; border-color: #fef08a; }
+.status-approved { background: #ecfdf5; color: #047857; border-color: #d1fae5; }
+.status-rejected { background: #fff1f2; color: #be123c; border-color: #fecdd3; }
+.status-cancelled { background: #f8fafc; color: #475569; border-color: #e2e8f0; }
+
+/* ---------- Scrollbar ---------- */
+::-webkit-scrollbar {
+  width: 5px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-light);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* ---------- Selection ---------- */
+::selection {
+  background: rgba(37, 99, 235, 0.2);
+  color: #1e293b;
+}

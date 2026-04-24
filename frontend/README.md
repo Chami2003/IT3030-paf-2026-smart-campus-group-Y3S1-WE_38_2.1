@@ -1,85 +1,16 @@
-# Frontend - React Web Application
+# React + Vite
 
-The frontend web application for Smart Campus management system.
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-## Technology Stack
+Currently, two official plugins are available:
 
-- React 18+
-- Node.js 14+
-- npm/yarn
-- Axios (HTTP client)
-- React Router
-- CSS/TailwindCSS (or your preferred styling)
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
 
-## Project Structure
+## React Compiler
 
-```
-frontend/
-├── src/
-│   ├── components/
-│   │   ├── Header.js
-│   │   ├── Navigation.js
-│   │   └── (other components)
-│   ├── pages/
-│   │   ├── Home.js
-│   │   ├── Dashboard.js
-│   │   └── (other pages)
-│   ├── services/
-│   │   └── api.js
-│   ├── styles/
-│   ├── App.js
-│   └── index.js
-├── public/
-│   └── index.html
-├── package.json
-└── Dockerfile
-```
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-## Installation
+## Expanding the ESLint configuration
 
-```bash
-npm install
-```
-
-## Development
-
-```bash
-npm start
-```
-
-The application will open at [http://localhost:3000](http://localhost:3000)
-
-## Build
-
-```bash
-npm run build
-```
-
-## Testing
-
-```bash
-npm test
-```
-
-## Docker
-
-```bash
-docker build -t smart-campus-frontend .
-docker run -p 3000:3000 smart-campus-frontend
-```
-
-## API Communication
-
-Configure API endpoint in `.env`:
-
-```
-REACT_APP_API_URL=http://localhost:8080
-```
-
-## Features
-
-- User authentication and authorization
-- Dashboard with campus statistics
-- Facility booking system
-- Event management
-- Resource allocation
+If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.

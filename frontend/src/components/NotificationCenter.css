@@ -1,0 +1,196 @@
+/* ============================================
+   NOTIFICATION CENTER — SaaS Enterprise Styles
+   ============================================ */
+
+.notifications-container {
+  width: 100%;
+}
+
+.page-banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+}
+
+.page-banner h1 {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--text-heading);
+  margin-bottom: 0.35rem;
+}
+
+.page-banner p {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+.notifications-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+  width: 100%;
+}
+
+/* Slim Horizontal SaaS Row */
+.notification-card-full {
+  display: grid;
+  grid-template-columns: auto 2.5fr 1fr 1.5fr auto;
+  align-items: center;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-left: 4px solid var(--accent-red);
+  border-radius: var(--radius-md);
+  padding: 0.85rem 1.5rem;
+  gap: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+  width: 100%;
+}
+
+.notification-card-full:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
+  border-color: var(--border-light);
+}
+
+.nc-icon-col {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: var(--accent-red-bg);
+  border-radius: var(--radius-sm);
+  color: var(--accent-red-dark);
+  font-size: 1.2rem;
+}
+
+.nc-title-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.nc-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-heading);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.nc-sub {
+  font-size: 0.72rem;
+  color: var(--accent-red-dark);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.nc-meta {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+}
+
+.nc-meta-muted {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.nc-actions-col {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.nc-action-btn {
+  background: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  padding: 0.5rem 1.25rem;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.nc-action-btn:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-light);
+  color: var(--text-heading);
+}
+
+.nc-action-btn.primary {
+  background: var(--accent-red);
+  color: white;
+  border-color: var(--accent-red);
+}
+
+.nc-action-btn.primary:hover {
+  background: var(--accent-red-dark);
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.2);
+}
+
+.no-notifications {
+  background: var(--bg-card);
+  border: 1px dashed var(--border-light);
+  border-radius: var(--radius-lg);
+  padding: 5rem 2rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.no-notifications-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  opacity: 0.8;
+}
+
+.no-notifications h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-heading);
+  margin-bottom: 0.5rem;
+}
+
+.no-notifications p {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .notification-card-full {
+    grid-template-columns: auto 1fr auto;
+    gap: 1rem;
+  }
+  .nc-meta {
+    display: none; /* Hide columns on small screens */
+  }
+}
+
+@media (max-width: 500px) {
+  .notification-card-full {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .nc-icon-col {
+    display: none;
+  }
+  .nc-actions-col {
+    justify-content: flex-start;
+  }
+}
