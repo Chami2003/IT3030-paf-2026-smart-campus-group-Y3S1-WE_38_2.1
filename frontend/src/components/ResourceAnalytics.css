@@ -271,3 +271,106 @@
   margin-left: 0.35rem;
   font-weight: 700;
 }
+
+/* ---------- Maintenance Alerts ---------- */
+.alerts-section {
+  background: var(--accent-red-bg);
+  border: 1px solid rgba(220, 38, 38, 0.2);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  margin-top: 1rem;
+}
+
+.alerts-section.all-clear {
+  background: var(--accent-green-bg);
+  border-color: rgba(5, 150, 105, 0.2);
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 1.5rem 2rem;
+}
+
+.alerts-header {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid rgba(220, 38, 38, 0.15);
+}
+
+.alerts-main-icon {
+  font-size: 2.5rem;
+}
+
+.alerts-header h3,
+.alerts-section.all-clear h3 {
+  color: var(--text-heading);
+  font-size: 1.35rem;
+  font-weight: 800;
+  margin-bottom: 0.25rem;
+}
+
+.alerts-header p,
+.alerts-section.all-clear p {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+.alerts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5rem;
+}
+
+.alert-card {
+  background: var(--bg-card);
+  border: 1px solid rgba(220, 38, 38, 0.15);
+  border-left: 5px solid var(--accent-red);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.alert-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-card);
+}
+
+.alert-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.alert-card-header h4 {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--text-heading);
+}
+
+.alert-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: var(--accent-red-bg);
+  color: var(--accent-red-dark);
+  padding: 0.3rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  box-shadow: 0 0 10px rgba(220, 38, 38, 0.1);
+}
+
+.alert-card-body p {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.35rem;
+}
+
+.alert-card-body p strong {
+  color: var(--text-primary);
+  font-weight: 700;
+}

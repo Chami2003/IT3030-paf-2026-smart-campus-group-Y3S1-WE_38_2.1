@@ -209,41 +209,39 @@ const ResourceAnalytics = () => {
       </div>
 
       {/* ── Maintenance Alerts ── */}
-      {outOfServiceCount > 0 && (
+      {outOfServiceCount > 0 ? (
         <div className="alerts-section">
           <div className="alerts-header">
-            <div className="alerts-title-row">
-              <span className="alerts-icon">⚠️</span>
-              <div>
-                <h3>Maintenance Alerts</h3>
-                <p>{outOfServiceCount} resource{outOfServiceCount > 1 ? 's' : ''} currently out of service and requiring attention.</p>
-              </div>
+            <span className="alerts-main-icon">🚨</span>
+            <div>
+              <h3>Urgent Maintenance Required</h3>
+              <p>{outOfServiceCount} resource{outOfServiceCount > 1 ? 's' : ''} currently out of service and requiring attention.</p>
             </div>
           </div>
-          <table className="alerts-table">
-            <thead>
-              <tr>
-                <th>Resource Name</th>
-                <th>Type</th>
-                <th>Location</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {resources
-                .filter(r => r.status === 'OUT_OF_SERVICE')
-                .map(resource => (
-                  <tr key={resource.id}>
-                    <td style={{ fontWeight: 700 }}>{resource.name}</td>
-                    <td>{(resource.type || '').replace(/_/g, ' ')}</td>
-                    <td>{resource.location}</td>
-                    <td>
-                      <span className="alert-tag">🔧 Needs Repair</span>
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
+          <div className="alerts-grid">
+            {resources
+              .filter(r => r.status === 'OUT_OF_SERVICE')
+              .map(resource => (
+                <div className="alert-card" key={resource.id}>
+                  <div className="alert-card-header">
+                    <h4>{resource.name}</h4>
+                    <span className="alert-tag">⚠️ Needs Repair</span>
+                  </div>
+                  <div className="alert-card-body">
+                    <p><strong>Type:</strong> {(resource.type || '').replace(/_/g, ' ')}</p>
+                    <p><strong>Location:</strong> {resource.location}</p>
+                  </div>
+                </div>
+              ))}
+          </div>
+        </div>
+      ) : (
+        <div className="alerts-section all-clear">
+          <span className="alerts-main-icon">✨</span>
+          <div>
+            <h3>All systems operational</h3>
+            <p>No resources are currently out of service.</p>
+          </div>
         </div>
       )}
     </div>
