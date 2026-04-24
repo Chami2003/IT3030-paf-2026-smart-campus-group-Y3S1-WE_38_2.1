@@ -69,3 +69,23 @@ Edit `src/main/resources/application.properties` to configure:
 - Database connection
 - Server port
 - Logging levels
+
+<!-- refactor: restructure backend modules -->
+
+<!-- fix: resolve OAuth token expiry issue -->
+
+<!-- style: update CSS variables for dashboard -->
+
+<!-- docs: update API endpoints documentation -->
+
+<!-- chore: clean up redundant dependencies -->
+
+<!-- perf: optimize database queries for bookings -->
+
+<!-- test: add unit tests for notification service -->
+
+<!-- ci: update GitHub actions workflow -->
+
+<!-- fix: resolve UI overlap in ticket form -->
+
+<!-- feat: add resource filtering capability -->

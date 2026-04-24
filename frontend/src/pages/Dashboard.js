@@ -1,11 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { 
+  Building2, 
+  CalendarCheck, 
+  Ticket, 
+  Bell, 
+  ArrowRight, 
+  Mail, 
+  ShieldCheck 
+} from 'lucide-react';
 import Notifications from '../components/Notifications';
 import './Dashboard.css';
 
 function Dashboard({ user }) {
   const [typedText, setTypedText] = useState('');
-  const fullText = `Welcome, ${user?.name || 'User'}!`;
+  const fullText = `Welcome, ${user?.name || 'Scholar'}!`;
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -20,47 +29,70 @@ function Dashboard({ user }) {
       } else {
         clearInterval(timer);
       }
-    }, 100); // 100ms per character
+    }, 100);
 
     return () => clearInterval(timer);
   }, [fullText]);
 
+  const userRoles = user?.roles?.length > 0 ? user.roles.join(', ') : 'USER';
+
   return (
     <div className="dashboard-container">
-
       <main className="dashboard-content">
-        <div className="welcome-section">
+        <section className="welcome-section">
           <h2>
             {typedText}
             <span className="typing-cursor">|</span>
           </h2>
-          <p>You are logged in as: {user?.email}</p>
-          <p>Your roles: {(user?.role === 'ADMIN' || user?.email?.includes('admin') || user?.email === 'chamiduhimahansa2003@gmail.com') ? 'ADMIN' : 'USER'}</p>
-        </div>
+          <div className="welcome-info">
+            <p><Mail size={18} /> {user?.email}</p>
+            <p><ShieldCheck size={18} /> Role Access: {userRoles}</p>
+          </div>
+        </section>
 
         <div className="modules-grid">
-          <div className="module-card">
+          <div className="module-card card-facilities">
+            <div className="module-icon-wrapper">
+              <Building2 size={28} />
+            </div>
             <h3>Facilities & Assets</h3>
-            <p>View and manage campus resources</p>
-            <button onClick={() => navigate('/resources')}>Go to Facilities</button>
+            <p>Explore our campus infrastructure. View detailed catalogues, check real-time availability, and find asset locations.</p>
+            <button className="module-btn" onClick={() => navigate('/resources')}>
+              Explore Catalogue <ArrowRight size={18} />
+            </button>
           </div>
 
-          <div className="module-card">
-            <h3>Bookings</h3>
-            <p>Manage your bookings</p>
-            <button onClick={() => navigate('/bookings/my')}>Go to Bookings</button>
+          <div className="module-card card-bookings">
+            <div className="module-icon-wrapper">
+              <CalendarCheck size={28} />
+            </div>
+            <h3>Resource Bookings</h3>
+            <p>Reserve lecture halls, labs, and equipment for your academic activities. Track and manage your active reservations.</p>
+            <button className="module-btn" onClick={() => navigate('/bookings/my')}>
+              My Reservations <ArrowRight size={18} />
+            </button>
           </div>
 
-          <div className="module-card">
+          <div className="module-card card-tickets">
+            <div className="module-icon-wrapper">
+              <Ticket size={28} />
+            </div>
             <h3>Support Tickets</h3>
-            <p>Report and track issues</p>
-            <button onClick={() => navigate('/tickets')}>Go to Tickets</button>
+            <p>Encountered a technical issue? Raise a maintenance ticket and our technical team will resolve it promptly.</p>
+            <button className="module-btn" onClick={() => navigate('/tickets')}>
+              Support Desk <ArrowRight size={18} />
+            </button>
           </div>
 
-          <div className="module-card">
-            <h3>Notifications</h3>
-            <p>View your notifications</p>
-            <button onClick={() => navigate('/notifications')}>Go to Notifications</button>
+          <div className="module-card card-notifications">
+            <div className="module-icon-wrapper">
+              <Bell size={28} />
+            </div>
+            <h3>Smart Alerts</h3>
+            <p>Stay updated with system announcements, booking confirmations, and critical campus resource updates.</p>
+            <button className="module-btn" onClick={() => navigate('/notifications')}>
+              View Notifications <ArrowRight size={18} />
+            </button>
           </div>
         </div>
       </main>

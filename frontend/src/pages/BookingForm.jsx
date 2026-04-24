@@ -60,7 +60,8 @@ const BookingForm = () => {
     try {
       await bookingService.createBooking({
         ...formData,
-        resourceId: parseInt(formData.resourceId)
+        resourceId: parseInt(formData.resourceId),
+        expectedAttendees: formData.expectedAttendees ? parseInt(formData.expectedAttendees) : null
       });
       toast.success('Booking request submitted successfully!');
       navigate('/bookings/my');
@@ -68,7 +69,9 @@ const BookingForm = () => {
       if (err.response?.status === 409) {
         toast.error('Scheduling conflict detected! Please choose a different time.');
       } else {
-        toast.error(err.response?.data?.message || 'Failed to submit booking request.');
+        const errorMsg = err.response?.data?.message || err.message || 'Failed to submit booking request.';
+        console.error('Booking submission error:', err);
+        toast.error(errorMsg);
       }
     } finally {
       setLoading(false);

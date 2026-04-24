@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { bookingService } from '../services/bookingService';
-import { CheckCircle, XCircle, Filter, Search, User, Loader2, AlertCircle } from 'lucide-react';
+import { CheckCircle, XCircle, Filter, Search, Loader2, AlertCircle, Calendar } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { motion, AnimatePresence } from 'framer-motion';
+import './AdminBookings.css';
 
 const AdminBookings = () => {
   const [bookings, setBookings] = useState([]);
@@ -12,7 +13,7 @@ const AdminBookings = () => {
   const [rejectId, setRejectId] = useState(null);
   const [rejectionReason, setRejectionReason] = useState('');
 
-  const fetchAllBookings = async () => {
+  const fetchAllBookings = useCallback(async () => {
     setLoading(true);
     try {
       const res = await bookingService.getAllBookings(filters);
@@ -22,11 +23,11 @@ const AdminBookings = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [filters]);
 
   useEffect(() => {
     fetchAllBookings();
-  }, [filters]);
+  }, [fetchAllBookings]);
 
   const handleApprove = async (id) => {
     try {
@@ -61,19 +62,19 @@ const AdminBookings = () => {
   const statusOptions = ['PENDING', 'APPROVED', 'REJECTED', 'CANCELLED'];
 
   return (
-    <div className="max-w-7xl mx-auto py-8 px-4">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
-        <div>
-          <h1 className="text-3xl font-bold text-slate-800">Admin Control Hub</h1>
-          <p className="text-slate-500">Manage all campus resource requests</p>
+    <div className="admin-bookings-container">
+      <div className="admin-bookings-header">
+        <div className="header-title-group">
+          <h1>Admin Control Hub</h1>
+          <p>Manage and review all campus resource requests</p>
         </div>
 
         {/* Filters */}
-        <div className="flex flex-wrap items-center gap-4 p-4 glass-card rounded-xl">
-          <div className="flex items-center gap-2">
-            <Filter size={16} className="text-slate-400" />
+        <div className="admin-filters-bar">
+          <div className="filter-group">
+            <Filter size={18} className="filter-icon" />
             <select 
-              className="bg-transparent text-sm font-semibold outline-none text-slate-700"
+              className="admin-select"
               value={filters.status}
               onChange={(e) => setFilters({ ...filters, status: e.target.value })}
             >
@@ -81,12 +82,12 @@ const AdminBookings = () => {
               {statusOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)}
             </select>
           </div>
-          <div className="h-6 w-px bg-slate-200 hidden md:block"></div>
-          <div className="flex items-center gap-2">
-            <Search size={16} className="text-slate-400" />
+          <div className="filter-divider"></div>
+          <div className="filter-group">
+            <Calendar size={18} className="filter-icon" />
             <input 
               type="date"
-              className="bg-transparent text-sm font-semibold outline-none text-slate-700"
+              className="admin-date-input"
               value={filters.bookingDate}
               onChange={(e) => setFilters({ ...filters, bookingDate: e.target.value })}
             />
@@ -94,47 +95,62 @@ const AdminBookings = () => {
         </div>
       </div>
 
-      <div className="glass-card rounded-2xl overflow-hidden min-h-[400px]">
+      <div className="admin-bookings-card">
         {loading ? (
-          <div className="flex flex-col items-center justify-center p-20 gap-4">
-            <Loader2 className="animate-spin text-primary-500" size={40} />
+          <div className="admin-loader-container">
+            <Loader2 className="loader-spinner" size={48} />
+            <p>Fetching booking records...</p>
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse">
+          <div className="table-responsive">
+            <table className="admin-table">
               <thead>
-                <tr className="bg-slate-50/50 border-b border-slate-200">
-                  <th className="p-4 font-semibold text-slate-600">Requester</th>
-                  <th className="p-4 font-semibold text-slate-600">Resource & Time</th>
-                  <th className="p-4 font-semibold text-slate-600">Status</th>
-                  <th className="p-4 font-semibold text-slate-600">Actions</th>
+                <tr>
+                  <th>Requester</th>
+                  <th>Resource & Time</th>
+                  <th>Status</th>
+                  <th>Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 text-sm">
+              <tbody>
                 {bookings.length === 0 ? (
                   <tr>
-                    <td colSpan="4" className="p-20 text-center text-slate-400 italic">No bookings match the filters</td>
+                    <td colSpan="4">
+                      <div className="admin-empty-state">
+                        <Search size={64} className="empty-icon" />
+                        <p>No bookings found matching your criteria</p>
+                      </div>
+                    </td>
                   </tr>
                 ) : (
                   bookings.map((booking) => (
-                    <tr key={booking.id} className="hover:bg-slate-50/30 transition-colors">
-                      <td className="p-4">
-                        <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-full bg-primary-100 text-primary-600 flex items-center justify-center font-bold text-xs">
-                            {booking.requestedByName.charAt(0)}
+                    <motion.tr 
+                      key={booking.id}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                    >
+                      <td>
+                        <div className="requester-info">
+                          <div className="requester-avatar">
+                            {booking.requestedByName.charAt(0).toUpperCase()}
                           </div>
-                          <div>
-                            <div className="font-semibold text-slate-800">{booking.requestedByName}</div>
-                            <div className="text-[10px] text-slate-500">{booking.requestedByEmail}</div>
+                          <div className="requester-details">
+                            <span className="name">{booking.requestedByName}</span>
+                            <span className="email">{booking.requestedByEmail}</span>
                           </div>
                         </div>
                       </td>
-                      <td className="p-4">
-                        <div className="font-medium text-slate-700">{booking.resourceName}</div>
-                        <div className="text-xs text-slate-500">{booking.bookingDate} | {booking.startTime.substring(0, 5)} - {booking.endTime.substring(0, 5)}</div>
+                      <td>
+                        <div className="resource-info">
+                          <span className="resource-name">{booking.resourceName}</span>
+                          <span className="time-slot">
+                            {booking.bookingDate} | {booking.startTime.substring(0, 5)} - {booking.endTime.substring(0, 5)}
+                          </span>
+                        </div>
                       </td>
-                      <td className="p-4">
-                        <span className={`status-badge text-[10px] ${
+                      <td>
+                        <span className={`status-badge ${
                           booking.status === 'PENDING' ? 'status-pending' :
                           booking.status === 'APPROVED' ? 'status-approved' :
                           booking.status === 'REJECTED' ? 'status-rejected' : 'status-cancelled'
@@ -142,29 +158,31 @@ const AdminBookings = () => {
                           {booking.status}
                         </span>
                       </td>
-                      <td className="p-4">
+                      <td>
                         {booking.status === 'PENDING' ? (
-                          <div className="flex items-center gap-2">
+                          <div className="action-buttons">
                             <button 
                               onClick={() => handleApprove(booking.id)}
-                              className="p-2 text-emerald-500 hover:bg-emerald-50 rounded-lg transition-colors"
-                              title="Approve"
+                              className="btn-icon btn-approve"
+                              title="Approve Booking"
                             >
-                              <CheckCircle size={18} />
+                              <CheckCircle size={20} />
                             </button>
                             <button 
                               onClick={() => setRejectId(booking.id)}
-                              className="p-2 text-rose-500 hover:bg-rose-50 rounded-lg transition-colors"
-                              title="Reject"
+                              className="btn-icon btn-reject"
+                              title="Reject Booking"
                             >
-                              <XCircle size={18} />
+                              <XCircle size={20} />
                             </button>
                           </div>
                         ) : (
-                          <span className="text-slate-300 text-xs italic">Processed</span>
+                          <span className="processed-text">
+                            {booking.status === 'CANCELLED' ? 'Cancelled by User' : 'Processed'}
+                          </span>
                         )}
                       </td>
-                    </tr>
+                    </motion.tr>
                   ))
                 )}
               </tbody>
@@ -176,37 +194,42 @@ const AdminBookings = () => {
       {/* Reject Modal */}
       <AnimatePresence>
         {rejectId && (
-          <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="modal-overlay">
             <motion.div 
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-md border border-slate-200"
+              initial={{ scale: 0.95, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.95, opacity: 0, y: 20 }}
+              className="reject-modal"
             >
-              <div className="flex items-center gap-3 mb-4 text-rose-600">
-                <AlertCircle size={24} />
-                <h3 className="text-xl font-bold">Reject Booking Request</h3>
+              <div className="modal-header">
+                <AlertCircle size={28} />
+                <h3>Reject Request</h3>
               </div>
-              <p className="text-slate-500 text-sm mb-4">Please provide a brief reason for rejecting this request. This will be visible to the user.</p>
-              <textarea 
-                className="w-full p-3 rounded-xl border border-slate-200 focus:border-rose-300 focus:ring-4 focus:ring-rose-500/10 outline-none transition-all resize-none mb-6"
-                rows="4"
-                placeholder="Ex: The requested room is undergoing maintenance..."
-                value={rejectionReason}
-                onChange={(e) => setRejectionReason(e.target.value)}
-              />
-              <div className="grid grid-cols-2 gap-4">
+              <div className="modal-body">
+                <p>Please provide a reason for rejecting this booking. This reason will be shared with the requester.</p>
+                <textarea 
+                  className="modal-textarea"
+                  rows="4"
+                  placeholder="Reason for rejection..."
+                  value={rejectionReason}
+                  onChange={(e) => setRejectionReason(e.target.value)}
+                />
+              </div>
+              <div className="modal-actions">
                 <button 
-                  onClick={() => setRejectId(null)}
-                  className="py-2.5 rounded-xl border border-slate-200 font-semibold text-slate-600 hover:bg-slate-50 transition-colors"
+                  onClick={() => {
+                    setRejectId(null);
+                    setRejectionReason('');
+                  }}
+                  className="btn-modal btn-cancel"
                 >
                   Cancel
                 </button>
                 <button 
                   onClick={handleReject}
-                  className="py-2.5 rounded-xl bg-rose-600 text-white font-semibold hover:bg-rose-700 shadow-lg shadow-rose-600/20 transition-colors"
+                  className="btn-modal btn-submit-reject"
                 >
-                  Submit Rejection
+                  Confirm Rejection
                 </button>
               </div>
             </motion.div>

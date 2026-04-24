@@ -1,4 +1,4 @@
-package com.smartcampus.models;
+package com.smartcampus.entity;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;

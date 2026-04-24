@@ -1,7 +1,7 @@
-package com.smartcampus.controllers;
+package com.smartcampus.controller;
 
-import com.smartcampus.models.Resource;
-import com.smartcampus.repositories.ResourceRepository;
+import com.smartcampus.entity.Resource;
+import com.smartcampus.repository.ResourceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,8 +16,8 @@ import java.util.Optional;
  * Provides endpoints for CRUD operations and searching resources.
  */
 @RestController
-@RequestMapping("/resources")
-@CrossOrigin(origins = "*")
+@RequestMapping("/api/resources")
+@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:3001"}, allowCredentials = "true")
 public class ResourceController {
 
     @Autowired

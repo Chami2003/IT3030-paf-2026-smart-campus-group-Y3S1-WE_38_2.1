@@ -35,5 +35,5 @@ export const bookingService = {
 
 // Resource service stub
 export const resourceService = {
-  getAllResources: () => axios.get('/api/v1/resources'),
+  getAllResources: () => axios.get('/api/resources'),
 };

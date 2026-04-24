@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import apiClient from '../services/api';
-import { FiArrowLeft, FiChevronDown, FiEdit2, FiTrash2, FiUser, FiDownload } from 'react-icons/fi';
+import { FiArrowLeft, FiChevronDown, FiEdit2, FiTrash2, FiDownload } from 'react-icons/fi';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 
@@ -33,7 +33,7 @@ const TicketDetails = () => {
     const [resolutionNotes, setResolutionNotes] = useState('');
     const [rejectionReason, setRejectionReason] = useState('');
 
-    const fetchTicket = async () => {
+    const fetchTicket = useCallback(async () => {
         try {
             const response = await apiClient.get(`/tickets/${id}`);
             setTicket(response.data);
@@ -43,30 +43,30 @@ const TicketDetails = () => {
         } catch (error) {
             console.error('Error fetching ticket:', error);
         }
-    };
+    }, [id]);
 
-    const fetchComments = async () => {
+    const fetchComments = useCallback(async () => {
         try {
             const response = await apiClient.get(`/tickets/${id}/comments`);
             setComments(response.data);
         } catch (error) {
             console.error('Error fetching comments:', error);
         }
-    };
+    }, [id]);
 
-    const fetchHistory = async () => {
+    const fetchHistory = useCallback(async () => {
         try {
             const response = await apiClient.get(`/tickets/${id}/history`);
             setHistory(response.data);
         } catch (error) {
             console.error('Error fetching history:', error);
         }
-    };
+    }, [id]);
 
     useEffect(() => {
         setLoading(true);
         Promise.all([fetchTicket(), fetchComments(), fetchHistory()]).finally(() => setLoading(false));
-    }, [id]);
+    }, [fetchTicket, fetchComments, fetchHistory]);
 
     const handleAddComment = async () => {
         if (newComment.trim()) {

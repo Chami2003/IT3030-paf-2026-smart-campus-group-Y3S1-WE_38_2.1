@@ -23,12 +23,14 @@ public class Notification {
     @Column(nullable = false)
     private String message;
 
+    @Builder.Default
     private boolean isRead = false;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Builder.Default
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 }

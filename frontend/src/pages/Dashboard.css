@@ -1,127 +1,171 @@
-:root {
-  --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  --surface-color: #ffffff;
-  --bg-color: #f8fafc;
-  --text-primary: #1e293b;
-  --text-secondary: #64748b;
-  --accent-color: #6366f1;
-  --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
-  --hover-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
-}
-
 .dashboard-container {
-  padding: 40px;
-  background-color: var(--bg-color);
-  min-height: 100vh;
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem;
+    animation: fadeIn 0.8s ease-out;
 }
 
-.dashboard-content {
-  max-width: 1200px;
-  margin: 0 auto;
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
+/* Welcome Section */
 .welcome-section {
-  margin-bottom: 48px;
-  padding: 40px;
-  background: var(--primary-gradient);
-  border-radius: 24px;
-  color: white;
-  box-shadow: var(--card-shadow);
-  position: relative;
-  overflow: hidden;
+    background: var(--gradient-blue);
+    padding: 3.5rem 3rem;
+    border-radius: var(--radius-2xl);
+    color: white;
+    margin-bottom: 3rem;
+    box-shadow: 0 20px 40px rgba(37, 99, 235, 0.15);
+    position: relative;
+    overflow: hidden;
 }
 
 .welcome-section::after {
-  content: '';
-  position: absolute;
-  top: -50%;
-  right: -10%;
-  width: 300px;
-  height: 300px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 50%;
-  pointer-events: none;
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -10%;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+    border-radius: 50%;
 }
 
 .welcome-section h2 {
-  font-size: 36px;
-  margin: 0 0 12px 0;
-  font-weight: 800;
-  letter-spacing: -0.025em;
-}
-
-.welcome-section p {
-  font-size: 18px;
-  opacity: 0.9;
-  margin: 4px 0;
+    font-size: 2.75rem;
+    font-weight: 900;
+    margin-bottom: 1rem;
+    letter-spacing: -0.04em;
+    display: flex;
+    align-items: center;
 }
 
 .typing-cursor {
-  display: inline-block;
-  width: 3px;
-  background-color: currentColor;
-  margin-left: 4px;
-  animation: blink 1s step-end infinite;
+    display: inline-block;
+    width: 3px;
+    height: 2.75rem;
+    background-color: white;
+    margin-left: 8px;
+    animation: blink 1s step-end infinite;
 }
 
 @keyframes blink {
-  from, to { opacity: 1; }
-  50% { opacity: 0; }
+    from, to { opacity: 1; }
+    50% { opacity: 0; }
 }
 
+.welcome-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    opacity: 0.9;
+}
+
+.welcome-info p {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+/* Modules Grid */
 .modules-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 24px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2rem;
 }
 
 .module-card {
-  background: var(--surface-color);
-  padding: 32px;
-  border-radius: 20px;
-  box-shadow: var(--card-shadow);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  border: 1px solid rgba(226, 232, 240, 0.8);
-  display: flex;
-  flex-direction: column;
+    background: var(--bg-card);
+    padding: 2.5rem;
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--border-color);
+    transition: var(--transition-smooth);
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    position: relative;
+    overflow: hidden;
 }
 
 .module-card:hover {
-  transform: translateY(-8px);
-  box-shadow: var(--hover-shadow);
-  border-color: var(--accent-color);
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-card-hover);
+    border-color: var(--accent-blue-glow);
+}
+
+.module-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: var(--gradient-blue);
+    opacity: 0;
+    transition: var(--transition-normal);
+}
+
+.module-card:hover::before {
+    opacity: 1;
+}
+
+.module-icon-wrapper {
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.5rem;
+    transition: var(--transition-normal);
+}
+
+.module-card:hover .module-icon-wrapper {
+    transform: scale(1.1) rotate(5deg);
 }
 
 .module-card h3 {
-  margin: 0 0 12px 0;
-  color: var(--text-primary);
-  font-size: 20px;
-  font-weight: 700;
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: var(--text-heading);
+    letter-spacing: -0.02em;
 }
 
 .module-card p {
-  margin: 0 0 24px 0;
-  color: var(--text-secondary);
-  font-size: 15px;
-  line-height: 1.6;
-  flex-grow: 1;
+    color: var(--text-secondary);
+    font-size: 0.9375rem;
+    line-height: 1.5;
+    flex-grow: 1;
 }
 
-.module-card button {
-  background: #f1f5f9;
-  color: var(--accent-color);
-  border: none;
-  padding: 14px 20px;
-  border-radius: 12px;
-  cursor: pointer;
-  font-size: 15px;
-  font-weight: 600;
-  width: 100%;
-  transition: all 0.3s;
+.module-btn {
+    width: 100%;
+    padding: 0.875rem;
+    border-radius: var(--radius-md);
+    border: none;
+    background: var(--bg-input);
+    color: var(--text-primary);
+    font-weight: 700;
+    font-size: 0.9375rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    transition: var(--transition-fast);
 }
 
-.module-card button:hover {
-  background: var(--primary-gradient);
-  color: white;
+.module-card:hover .module-btn {
+    background: var(--accent-blue);
+    color: white;
+    box-shadow: 0 4px 12px var(--accent-blue-glow);
 }
+
+/* Specific Card Themes */
+.card-facilities .module-icon-wrapper { background: rgba(37, 99, 235, 0.1); color: var(--accent-blue); }
+.card-bookings .module-icon-wrapper { background: rgba(124, 58, 237, 0.1); color: var(--accent-purple); }
+.card-tickets .module-icon-wrapper { background: rgba(5, 150, 105, 0.1); color: var(--accent-green); }
+.card-notifications .module-icon-wrapper { background: rgba(245, 158, 11, 0.1); color: var(--accent-gold); }

@@ -1,6 +1,6 @@
 package com.smartcampus.hub.entity;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,6 +9,9 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+
+import com.smartcampus.entity.User;
+import com.smartcampus.entity.Resource;
 
 /**
  * Entity representing a booking of a campus resource by a user.

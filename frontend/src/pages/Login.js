@@ -61,10 +61,7 @@ function Login() {
     setMounted(true);
   }, []);
 
-  const handleGoogleSignIn = () => {
-    setIsLoading(true);
-    window.location.href = 'http://localhost:8080/oauth2/authorization/google';
-  };
+
 
   const handleDeveloperLogin = () => {
     login('ADMIN');

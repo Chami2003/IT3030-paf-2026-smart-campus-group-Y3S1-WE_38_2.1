@@ -1,5 +1,7 @@
 package com.smartcampus.security;
 
+import com.smartcampus.entity.Role;
+
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,14 +21,18 @@ public class JwtTokenProvider {
     @Value("${jwt.expiration}")
     private long jwtExpiration;
 
-    public String generateToken(String email, String role) {
+    public String generateToken(String email, Set<Role> roles) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + jwtExpiration);
 
         try {
+            Set<String> roleNames = roles.stream()
+                    .map(r -> "ROLE_" + r.name())
+                    .collect(Collectors.toSet());
+
             return Jwts.builder()
                     .setSubject(email)
-                    .claim("roles", Set.of(role)) // Keep as Set for compatibility
+                    .claim("roles", roleNames)
                     .setIssuedAt(now)
                     .setExpiration(expiryDate)
                     .signWith(io.jsonwebtoken.security.Keys.hmacShaKeyFor(jwtSecret.getBytes()), SignatureAlgorithm.HS512)
@@ -41,12 +47,13 @@ public class JwtTokenProvider {
         // Handle mock tokens for development
         if (token != null && token.startsWith("mock-jwt-token-")) {
             String role = token.replace("mock-jwt-token-", "");
-            return role.equals("admin") ? "admin@campus.edu" : "user@campus.edu";
+            return role.equals("admin") ? "admin@smartcampus.edu" : "user@smartcampus.edu";
         }
 
         try {
-            Claims claims = Jwts.parser()
+            Claims claims = Jwts.parserBuilder()
                     .setSigningKey(io.jsonwebtoken.security.Keys.hmacShaKeyFor(jwtSecret.getBytes()))
+                    .build()
                     .parseClaimsJws(token)
                     .getBody();
             return claims.getSubject();
@@ -68,8 +75,9 @@ public class JwtTokenProvider {
         }
 
         try {
-            Claims claims = Jwts.parser()
+            Claims claims = Jwts.parserBuilder()
                     .setSigningKey(io.jsonwebtoken.security.Keys.hmacShaKeyFor(jwtSecret.getBytes()))
+                    .build()
                     .parseClaimsJws(token)
                     .getBody();
             return (Set<String>) claims.get("roles", Set.class);
@@ -87,7 +95,10 @@ public class JwtTokenProvider {
         }
 
         try {
-            Jwts.parser().setSigningKey(io.jsonwebtoken.security.Keys.hmacShaKeyFor(jwtSecret.getBytes())).parseClaimsJws(token);
+            Jwts.parserBuilder()
+                .setSigningKey(io.jsonwebtoken.security.Keys.hmacShaKeyFor(jwtSecret.getBytes()))
+                .build()
+                .parseClaimsJws(token);
             return true;
         } catch (SecurityException e) {
             log.error("Invalid JWT signature", e);

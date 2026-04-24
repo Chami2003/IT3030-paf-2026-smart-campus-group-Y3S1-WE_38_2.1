@@ -12,7 +12,7 @@ export const AuthProvider = ({ children }) => {
     const mockUser = {
       id: role === 'ADMIN' ? 999 : 101,
       name: role === 'ADMIN' ? 'Admin User' : 'Standard User',
-      email: role === 'ADMIN' ? 'admin@campus.edu' : 'user@campus.edu',
+      email: role === 'ADMIN' ? 'admin@smartcampus.edu' : 'user@smartcampus.edu',
       role: role,
       roles: [role],
       token: `mock-jwt-token-${role.toLowerCase()}`

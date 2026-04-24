@@ -45,14 +45,14 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             // Find or create user
             User user = userRepository.findByEmail(email).orElseGet(() -> {
                 User newUser = new User(email, name, picture, googleId);
-                newUser.setRole(Role.USER);
+                // Roles are already initialized in constructor
                 User savedUser = userRepository.save(newUser);
                 log.info("New user created: {}", email);
                 return savedUser;
             });
 
             // Generate JWT token
-            String token = tokenProvider.generateToken(user.getEmail(), user.getRole().name());
+            String token = tokenProvider.generateToken(user.getEmail(), user.getRoles());
 
             log.debug("JWT token generated for user: {}", email);
 

@@ -12,8 +12,7 @@ import java.util.List;
 @RequestMapping("/api/notifications")
 public class NotificationController {
 
-    @Autowired
-    private NotificationService notificationService;
+
 
     @Autowired
     private NotificationRepository notificationRepository;

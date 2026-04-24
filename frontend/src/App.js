@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
@@ -31,11 +31,7 @@ function App() {
   const { user, isAuthenticated, setAuth, logout: contextLogout } = useAuth();
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    verifyToken();
-  }, []);
-
-  const verifyToken = async () => {
+  const verifyToken = useCallback(async () => {
     const token = localStorage.getItem('jwtToken');
     if (token) {
       try {
@@ -62,7 +58,11 @@ function App() {
       }
     }
     setLoading(false);
-  };
+  }, [user, setAuth, contextLogout]);
+
+  useEffect(() => {
+    verifyToken();
+  }, [verifyToken]);
 
   const handleLogout = async () => {
     try {

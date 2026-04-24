@@ -4,8 +4,8 @@ import com.smartcampus.hub.dto.BookingRequestDTO;
 import com.smartcampus.hub.dto.BookingResponseDTO;
 import com.smartcampus.hub.entity.Booking;
 import com.smartcampus.hub.entity.BookingStatus;
-import com.smartcampus.hub.entity.Resource;
-import com.smartcampus.hub.entity.User;
+import com.smartcampus.entity.Resource;
+import com.smartcampus.entity.User;
 import org.springframework.stereotype.Component;
 
 /**

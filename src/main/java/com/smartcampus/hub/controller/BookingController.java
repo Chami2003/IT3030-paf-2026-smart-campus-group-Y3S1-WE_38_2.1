@@ -26,6 +26,7 @@ import java.util.List;
 public class BookingController {
 
     private final BookingService bookingService;
+    private final com.smartcampus.repository.UserRepository userRepository;
 
     /**
      * Creates a new booking request.
@@ -107,12 +108,14 @@ public class BookingController {
      */
     private Long getCurrentUserId() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        // Assuming the 'name' of the principal holds the user ID for simplicity.
-        // In a real scenario, cast auth.getPrincipal() to a custom UserDetails class.
+        String identifier = auth.getName();
         try {
-            return Long.valueOf(auth.getName());
+            return Long.valueOf(identifier);
         } catch (NumberFormatException e) {
-            throw new RuntimeException("Logged in user identity is not a valid ID format.");
+            // If the identifier is an email (e.g., from mock token or OAuth), look up the user ID
+            return userRepository.findByEmail(identifier)
+                    .map(com.smartcampus.entity.User::getId)
+                    .orElseThrow(() -> new RuntimeException("User not found for identifier: " + identifier));
         }
     }
 

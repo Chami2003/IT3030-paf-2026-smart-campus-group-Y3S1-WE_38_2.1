@@ -23,8 +23,7 @@ public class AuthController {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private JwtTokenProvider tokenProvider;
+
 
     /**
      * Get current user info

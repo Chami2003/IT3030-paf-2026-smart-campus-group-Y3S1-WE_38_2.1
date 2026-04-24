@@ -3,6 +3,7 @@ package com.smartcampus.entity;
 import lombok.*;
 
 import javax.persistence.*;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -26,14 +27,21 @@ public class User {
     @Column(unique = true)
     private String googleId;
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
-    private Role role;
+    @Column(name = "role")
+    @Builder.Default
+    private Set<Role> roles = new HashSet<>();
 
+    @Builder.Default
     private boolean enabled = true;
 
+    @Builder.Default
     @Column(name = "created_at", nullable = false, updatable = false)
     private Long createdAt = System.currentTimeMillis();
 
+    @Builder.Default
     @Column(name = "updated_at")
     private Long updatedAt = System.currentTimeMillis();
 
@@ -42,7 +50,8 @@ public class User {
         this.name = name;
         this.picture = picture;
         this.googleId = googleId;
-        this.role = Role.USER;
+        this.roles = new HashSet<>();
+        this.roles.add(Role.USER);
         this.createdAt = System.currentTimeMillis();
         this.updatedAt = System.currentTimeMillis();
     }

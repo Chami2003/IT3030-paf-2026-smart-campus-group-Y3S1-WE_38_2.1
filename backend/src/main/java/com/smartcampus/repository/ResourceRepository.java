@@ -1,6 +1,6 @@
-package com.smartcampus.repositories;
+package com.smartcampus.repository;
 
-import com.smartcampus.models.Resource;
+import com.smartcampus.entity.Resource;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
