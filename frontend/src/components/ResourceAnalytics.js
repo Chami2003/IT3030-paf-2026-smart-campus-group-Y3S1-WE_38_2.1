@@ -211,12 +211,21 @@ const ResourceAnalytics = () => {
       {/* ── Maintenance Alerts ── */}
       {outOfServiceCount > 0 ? (
         <div className="alerts-section">
-          <div className="alerts-header">
-            <span className="alerts-main-icon">🚨</span>
-            <div>
-              <h3>Urgent Maintenance Required</h3>
-              <p>{outOfServiceCount} resource{outOfServiceCount > 1 ? 's' : ''} currently out of service and requiring attention.</p>
+          <div className="alerts-header" style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+            <div style={{ display: 'flex', gap: '1.25rem', alignItems: 'center' }}>
+              <span className="alerts-main-icon">🚨</span>
+              <div>
+                <h3>Urgent Maintenance Required</h3>
+                <p>{outOfServiceCount} resource{outOfServiceCount > 1 ? 's' : ''} currently out of service and requiring attention.</p>
+              </div>
             </div>
+            <a href="/notifications" style={{
+              padding: '0.6rem 1.2rem', background: 'white', color: 'var(--accent-red-dark)',
+              border: '1px solid var(--accent-red)', borderRadius: 'var(--radius-sm)',
+              fontWeight: '700', fontSize: '0.85rem', textDecoration: 'none', transition: 'all 0.2s'
+            }}>
+              View All Notifications ➔
+            </a>
           </div>
           <div className="alerts-grid">
             {resources

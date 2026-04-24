@@ -51,6 +51,18 @@ const Navigation = ({ isAuthenticated }) => {
               </a>
             </li>
             <li>
+              <a href="/notifications" className={currentPath === '/notifications' ? 'active' : ''}>
+                <span className="nav-icon" style={{ position: 'relative' }}>
+                  🔔
+                  <span style={{
+                    position: 'absolute', top: '-2px', right: '-2px', width: '8px', height: '8px',
+                    background: 'var(--accent-red)', borderRadius: '50%'
+                  }}></span>
+                </span>
+                Notifications
+              </a>
+            </li>
+            <li>
               <a href="/bookings" className={currentPath === '/bookings' ? 'active' : ''}>
                 <span className="nav-icon">📅</span> Booking Requests
               </a>

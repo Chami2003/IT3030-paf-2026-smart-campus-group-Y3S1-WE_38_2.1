@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { resourceAPI } from '../services/api';
+import { toast } from 'react-toastify';
 import './ResourceCatalogue.css';
 
 /**
@@ -78,6 +79,14 @@ const ResourceForm = ({ resource, onClose, onSave }) => {
       } else {
         await resourceAPI.createResource(formData);
       }
+      
+      // Trigger toast if status is OUT_OF_SERVICE
+      if (formData.status === 'OUT_OF_SERVICE') {
+        toast.error(`⚠️ ${formData.name} marked as OUT OF SERVICE!`);
+      } else {
+        toast.success(`✅ ${formData.name} saved successfully!`);
+      }
+      
       onSave();
     } catch (err) {
       console.error('Error saving resource:', err);

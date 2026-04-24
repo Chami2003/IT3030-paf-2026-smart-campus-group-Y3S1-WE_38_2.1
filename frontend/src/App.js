@@ -4,6 +4,9 @@ import Navigation from './components/Navigation';
 import Header from './components/Header';
 import ResourceCatalogue from './components/ResourceCatalogue';
 import ResourceAnalytics from './components/ResourceAnalytics';
+import NotificationCenter from './components/NotificationCenter';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 function App() {
@@ -47,6 +50,7 @@ function App() {
 
   return (
     <div className="App">
+      <ToastContainer position="top-right" autoClose={5000} theme="light" />
       <Header user={user} isAuthenticated={isAuthenticated} onLogout={handleLogout} />
       <Navigation isAuthenticated={isAuthenticated} />
       <main className="main-content">
@@ -58,6 +62,8 @@ function App() {
                 <ResourceCatalogue />
               ) : window.location.pathname === '/analytics' ? (
                 <ResourceAnalytics />
+              ) : window.location.pathname === '/notifications' ? (
+                <NotificationCenter />
               ) : (
                 <>
                   <h1>Welcome to Smart Campus</h1>
