@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { FiSearch, FiPlus, FiChevronRight } from 'react-icons/fi';
+import StatCards from './StatCards';
 
 const TicketList = () => {
     const [tickets, setTickets] = useState([]);
@@ -70,6 +71,8 @@ const TicketList = () => {
     return (
         <div style={{ width: '100%', boxSizing: 'border-box', margin: '0', padding: '30px', fontFamily: 'Inter, system-ui, sans-serif', backgroundColor: '#fafafa', minHeight: '100vh' }}>
             
+            <StatCards />
+
             {/* Top Navigation / Filters */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
                 

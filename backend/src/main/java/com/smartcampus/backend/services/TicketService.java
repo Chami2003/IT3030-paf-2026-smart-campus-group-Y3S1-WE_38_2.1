@@ -12,7 +12,9 @@ import java.io.File;
 import java.nio.file.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -70,6 +72,27 @@ public class TicketService {
 
     public List<TicketHistory> getTicketHistory(Long ticketId) {
         return ticketHistoryRepository.findByTicketIdOrderByTimestampAsc(ticketId);
+    }
+
+    public Map<String, Long> getTicketStats() {
+        List<Ticket> allTickets = ticketRepository.findAll();
+        long total = allTickets.size();
+        long pending = allTickets.stream()
+            .filter(t -> t.getStatus() == Ticket.Status.OPEN || t.getStatus() == Ticket.Status.IN_PROGRESS)
+            .count();
+        long resolved = allTickets.stream()
+            .filter(t -> t.getStatus() == Ticket.Status.RESOLVED || t.getStatus() == Ticket.Status.CLOSED)
+            .count();
+        long critical = allTickets.stream()
+            .filter(t -> t.getPriority() == Ticket.Priority.HIGH)
+            .count();
+
+        Map<String, Long> stats = new HashMap<>();
+        stats.put("totalTickets", total);
+        stats.put("pendingTickets", pending);
+        stats.put("resolvedTickets", resolved);
+        stats.put("criticalTickets", critical);
+        return stats;
     }
 
     public Ticket updateTicketDetails(Long id, Ticket ticketDetails) {

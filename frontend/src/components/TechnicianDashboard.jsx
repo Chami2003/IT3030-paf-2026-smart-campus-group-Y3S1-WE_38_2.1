@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { FiSearch, FiTrash2 } from 'react-icons/fi';
+import StatCards from './StatCards';
 
 const TechnicianDashboard = () => {
   const [tickets, setTickets] = useState([]);
@@ -157,6 +158,8 @@ const TechnicianDashboard = () => {
   return (
     <div style={{ width: '100%', boxSizing: 'border-box', margin: '0', padding: '20px', fontFamily: 'Inter, system-ui, sans-serif', backgroundColor: '#ffffff', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       
+      <StatCards />
+
       {/* Top Header */}
       <div style={{ marginBottom: '20px' }}>
         <h1 style={{ margin: '0 0 20px 0', fontSize: '20px', color: '#111827', display: 'flex', alignItems: 'center', gap: '8px' }}>

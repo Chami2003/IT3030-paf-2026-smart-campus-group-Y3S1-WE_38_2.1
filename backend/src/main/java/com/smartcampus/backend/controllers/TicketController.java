@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import jakarta.validation.Valid;
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
@@ -43,6 +44,12 @@ public class TicketController {
             .filter(t -> t.getId().equals(id))
             .findFirst()
             .orElseThrow(() -> new RuntimeException("Ticket not found")));
+    }
+    
+    // Get Stats
+    @GetMapping("/stats")
+    public ResponseEntity<Map<String, Long>> getTicketStats() {
+        return ResponseEntity.ok(ticketService.getTicketStats());
     }
     
     // Get Ticket History
