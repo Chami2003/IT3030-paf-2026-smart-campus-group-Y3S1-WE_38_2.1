@@ -46,6 +46,11 @@ const Navigation = ({ isAuthenticated }) => {
               </a>
             </li>
             <li>
+              <a href="/analytics" className={currentPath === '/analytics' ? 'active' : ''}>
+                <span className="nav-icon">📈</span> Analytics
+              </a>
+            </li>
+            <li>
               <a href="/bookings" className={currentPath === '/bookings' ? 'active' : ''}>
                 <span className="nav-icon">📅</span> Booking Requests
               </a>

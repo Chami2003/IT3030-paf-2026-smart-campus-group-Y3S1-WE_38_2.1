@@ -3,6 +3,7 @@ import './App.css';
 import Navigation from './components/Navigation';
 import Header from './components/Header';
 import ResourceCatalogue from './components/ResourceCatalogue';
+import ResourceAnalytics from './components/ResourceAnalytics';
 
 
 function App() {
@@ -55,6 +56,8 @@ function App() {
             <div className="dashboard">
               {window.location.pathname === '/resources' ? (
                 <ResourceCatalogue />
+              ) : window.location.pathname === '/analytics' ? (
+                <ResourceAnalytics />
               ) : (
                 <>
                   <h1>Welcome to Smart Campus</h1>
