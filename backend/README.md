@@ -95,3 +95,5 @@ Edit `src/main/resources/application.properties` to configure:
 <!-- fix: resolve OAuth token expiry issue -->
 
 <!-- style: update CSS variables for dashboard -->
+
+<!-- docs: update API endpoints documentation -->
