@@ -91,3 +91,5 @@ Edit `src/main/resources/application.properties` to configure:
 <!-- feat: add resource filtering capability -->
 
 <!-- refactor: restructure backend modules -->
+
+<!-- fix: resolve OAuth token expiry issue -->
