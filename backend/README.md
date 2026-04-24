@@ -89,3 +89,5 @@ Edit `src/main/resources/application.properties` to configure:
 <!-- fix: resolve UI overlap in ticket form -->
 
 <!-- feat: add resource filtering capability -->
+
+<!-- refactor: restructure backend modules -->
