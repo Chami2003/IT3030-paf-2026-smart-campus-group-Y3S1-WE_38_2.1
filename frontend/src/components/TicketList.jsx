@@ -1,174 +1,220 @@
 import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { FiSearch, FiPlus, FiChevronRight } from 'react-icons/fi';
 
 const TicketList = () => {
     const [tickets, setTickets] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
-    
-    const [selectedTicket, setSelectedTicket] = useState(null);
-    const [newStatus, setNewStatus] = useState('');
-    const [notes, setNotes] = useState('');
+    const [filterStatus, setFilterStatus] = useState('All');
+    const [filterPriority, setFilterPriority] = useState('All');
+    const navigate = useNavigate();
 
     useEffect(() => {
+        const fetchTickets = async () => {
+            try {
+                const response = await axios.get('http://localhost:8082/api/tickets');
+                setTickets(response.data);
+            } catch (error) {
+                console.error("Error fetching tickets:", error);
+            }
+        };
         fetchTickets();
     }, []);
 
-    const fetchTickets = async () => {
-        try {
-            const response = await axios.get('http://localhost:8082/api/tickets');
-            setTickets(response.data);
-        } catch (error) {
-            console.error("Error fetching tickets:", error);
-        }
-    };
-
-    const handleDelete = async (id) => {
-        if (window.confirm("Are you sure?")) {
-            try {
-                await axios.delete(`http://localhost:8082/api/tickets/${id}`);
-                alert("Ticket Deleted!");
-                fetchTickets();
-            } catch (error) {
-                alert("Failed to delete.");
-            }
-        }
-    };
-
-    const handleEditClick = (ticket) => {
-        setSelectedTicket(ticket);
-        setNewStatus(ticket.status || 'OPEN');
-        setNotes(ticket.resolutionNotes || '');
-    };
-
-    const handleUpdate = async () => {
-        try {
-            const updatedData = {
-                ...selectedTicket,
-                status: newStatus,
-                resolutionNotes: notes,
-                assignedTechnicianId: "TECH-001" 
-            };
-            await axios.put(`http://localhost:8082/api/tickets/${selectedTicket.id}`, updatedData);
-            alert("Ticket Updated!");
-            setSelectedTicket(null);
-            fetchTickets();
-        } catch (error) {
-            alert("Update Failed.");
+    const getStatusStyle = (status) => {
+        const base = { padding: '6px 14px', borderRadius: '16px', fontSize: '11px', fontWeight: 'bold', display: 'inline-block' };
+        switch(status?.toUpperCase()) {
+            case 'OPEN': return { ...base, backgroundColor: '#e0e7ff', color: '#4338ca' }; // Light blue, deep blue text
+            case 'IN_PROGRESS': return { ...base, backgroundColor: '#fef3c7', color: '#d97706' }; // Light orange, deep orange text
+            case 'RESOLVED': return { ...base, backgroundColor: '#dcfce7', color: '#15803d' }; // Light green, deep green text
+            case 'CLOSED': return { ...base, backgroundColor: '#e5e7eb', color: '#4b5563' }; // Light gray, dark gray text
+            case 'REJECTED': return { ...base, backgroundColor: '#ffe4e6', color: '#e11d48' }; // Light red, deep red text
+            default: return { ...base, backgroundColor: '#f3f4f6', color: '#6b7280' };
         }
     };
 
     const getPriorityStyle = (priority) => {
-        switch (priority) {
-            case 'HIGH': return { backgroundColor: '#d9534f', color: 'white', padding: '4px 8px', borderRadius: '4px', fontWeight: 'bold' };
-            case 'MEDIUM': return { backgroundColor: '#f0ad4e', color: 'black', padding: '4px 8px', borderRadius: '4px', fontWeight: 'bold' };
-            case 'LOW': return { backgroundColor: '#5cb85c', color: 'white', padding: '4px 8px', borderRadius: '4px', fontWeight: 'bold' };
-            default: return { backgroundColor: '#eee', padding: '4px 8px', borderRadius: '4px' };
+        const base = { padding: '6px 14px', borderRadius: '16px', fontSize: '11px', fontWeight: 'bold', display: 'inline-block' };
+        switch(priority?.toUpperCase()) {
+            case 'HIGH': return { ...base, backgroundColor: '#ffe4e6', color: '#e11d48' }; // Light red, deep red text
+            case 'MEDIUM': return { ...base, backgroundColor: '#fef3c7', color: '#d97706' }; // Light orange, deep orange text
+            case 'LOW': return { ...base, backgroundColor: '#dcfce7', color: '#15803d' }; // Light green, deep green text
+            default: return { ...base, backgroundColor: '#f3f4f6', color: '#6b7280' };
         }
     };
 
+    const formatId = (id) => `TKT-2026-${String(id).padStart(3, '0')}`;
+
+    const formatDateTime = (isoString) => {
+        if (!isoString) return { date: 'N/A', time: '' };
+        const d = new Date(isoString);
+        const date = d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+        const time = d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+        return { date, time };
+    };
+
     const filteredTickets = tickets.filter(t => {
-        const title = t.title ? t.title.toLowerCase() : "";
+        const subject = t.title ? t.title.toLowerCase() : "";
         const search = searchTerm ? searchTerm.toLowerCase() : "";
-        return title.includes(search);
+        const matchesSearch = subject.includes(search);
+        const matchesPriority = filterPriority === 'All' || t.priority?.toUpperCase() === filterPriority.toUpperCase();
+        const matchesStatus = filterStatus === 'All' || t.status?.toUpperCase() === filterStatus.toUpperCase();
+        
+        return matchesSearch && matchesPriority && matchesStatus;
     });
 
+    const thStyle = { padding: '16px 20px', textAlign: 'left', fontSize: '11px', fontWeight: 'bold', color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.05em' };
+    const tdStyle = { padding: '16px 20px', fontSize: '14px', color: '#111827', verticalAlign: 'middle' };
+
     return (
-        <div style={{ padding: '20px', width: '95%', margin: 'auto', fontFamily: 'Arial, sans-serif' }}>
-            <h2 style={{ textAlign: 'center', color: '#333' }}>Smart Campus Operations - Ticket Management</h2>
+        <div style={{ width: '100%', boxSizing: 'border-box', margin: '0', padding: '30px', fontFamily: 'Inter, system-ui, sans-serif', backgroundColor: '#fafafa', minHeight: '100vh' }}>
             
-            <div style={{ marginBottom: '20px', textAlign: 'center' }}>
-                <input 
-                    type="text" 
-                    placeholder="Search by Title..." 
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    style={{ width: '60%', padding: '12px', borderRadius: '25px', border: '1px solid #ccc', outline: 'none' }}
-                />
-            </div>
+            {/* Top Navigation / Filters */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+                
+                {/* Search Bar */}
+                <div style={{ position: 'relative', width: '280px' }}>
+                    <FiSearch style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#9ca3af' }} size={18} />
+                    <input 
+                        type="text" 
+                        placeholder="Search tickets..." 
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        style={{ 
+                            width: '100%', 
+                            padding: '10px 10px 10px 38px', 
+                            borderRadius: '8px', 
+                            border: '1px solid #d1d5db', 
+                            outline: 'none',
+                            fontSize: '14px',
+                            boxSizing: 'border-box'
+                        }}
+                    />
+                </div>
 
-            <table style={{ width: '100%', borderCollapse: 'collapse', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
-                <thead>
-                    <tr style={{ backgroundColor: '#333', color: 'white' }}>
-                        <th style={{ padding: '12px', textAlign: 'left' }}>Title</th>
-                        <th style={{ padding: '12px', textAlign: 'left' }}>Priority</th>
-                        {/* --- අලුතින් එකතු කළ Column එක --- */}
-                        <th style={{ padding: '12px', textAlign: 'left' }}>Images</th>
-                        <th style={{ padding: '12px', textAlign: 'left' }}>Status</th>
-                        <th style={{ padding: '12px', textAlign: 'center' }}>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {filteredTickets.length > 0 ? (
-                        filteredTickets.map(ticket => (
-                            <tr key={ticket.id} style={{ borderBottom: '1px solid #ddd' }}>
-                                <td style={{ padding: '12px' }}>{ticket.title || "No Title"}</td>
-                                <td style={{ padding: '12px' }}>
-                                    <span style={getPriorityStyle(ticket.priority)}>
-                                        {ticket.priority || "LOW"}
-                                    </span>
-                                </td>
-                                
-                                {/* --- පින්තූර පෙන්වන කොටස --- */}
-                                <td style={{ padding: '12px' }}>
-                                    <div style={{ display: 'flex', gap: '5px' }}>
-                                        {ticket.attachmentUrls && ticket.attachmentUrls.length > 0 ? (
-                                            ticket.attachmentUrls.map((url, index) => (
-                                                <img 
-                                                    key={index} 
-                                                    src={`http://localhost:8082${url}`} 
-                                                    alt="attachment" 
-                                                    style={{ width: '40px', height: '40px', borderRadius: '4px', objectFit: 'cover', cursor: 'pointer', border: '1px solid #ddd' }} 
-                                                    onClick={() => window.open(`http://localhost:8082${url}`, '_blank')}
-                                                    title="Click to view full image"
-                                                />
-                                            ))
-                                        ) : (
-                                            <span style={{ color: '#ccc', fontSize: '12px' }}>No Images</span>
-                                        )}
-                                    </div>
-                                </td>
-
-                                <td style={{ padding: '12px', fontWeight: 'bold', color: ticket.status === 'RESOLVED' ? '#28a745' : '#007bff' }}>
-                                    {ticket.status}
-                                </td>
-                                <td style={{ padding: '12px', textAlign: 'center' }}>
-                                    <button onClick={() => handleEditClick(ticket)} style={{ marginRight: '8px', backgroundColor: '#007bff', color: 'white', border: 'none', padding: '6px 12px', borderRadius: '4px', cursor: 'pointer' }}>Update</button>
-                                    <button onClick={() => handleDelete(ticket.id)} style={{ backgroundColor: '#dc3545', color: 'white', border: 'none', padding: '6px 12px', borderRadius: '4px', cursor: 'pointer' }}>Delete</button>
-                                </td>
-                            </tr>
-                        ))
-                    ) : (
-                        <tr>
-                            <td colSpan="5" style={{ padding: '20px', textAlign: 'center', color: '#888' }}>No tickets found.</td>
-                        </tr>
-                    )}
-                </tbody>
-            </table>
-
-            {/* --- UPDATE MODAL (Popup) --- */}
-            {selectedTicket && (
-                <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0,0.6)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000 }}>
-                    <div style={{ backgroundColor: 'white', padding: '30px', borderRadius: '12px', width: '450px', boxShadow: '0 4px 15px rgba(0,0,0,0.3)' }}>
-                        <h3 style={{ marginTop: 0 }}>Update Ticket: <span style={{ color: '#007bff' }}>{selectedTicket.title}</span></h3>
-                        
-                        <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Change Status:</label>
-                        <select value={newStatus} onChange={(e) => setNewStatus(e.target.value)} style={{ width: '100%', padding: '10px', marginBottom: '20px', borderRadius: '4px', border: '1px solid #ccc' }}>
+                {/* Filters & Create Button */}
+                <div style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <span style={{ fontSize: '14px', fontWeight: '600', color: '#374151' }}>Status</span>
+                        <select 
+                            value={filterStatus} 
+                            onChange={(e) => setFilterStatus(e.target.value)} 
+                            style={{ padding: '8px 30px 8px 12px', borderRadius: '6px', border: '1px solid #d1d5db', outline: 'none', fontSize: '14px', color: '#374151', cursor: 'pointer', backgroundColor: 'white' }}
+                        >
+                            <option value="All">All</option>
                             <option value="OPEN">Open</option>
                             <option value="IN_PROGRESS">In Progress</option>
                             <option value="RESOLVED">Resolved</option>
                             <option value="CLOSED">Closed</option>
+                            <option value="REJECTED">Rejected</option>
                         </select>
-
-                        <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Resolution Notes:</label>
-                        <textarea value={notes} onChange={(e) => setNotes(e.target.value)} style={{ width: '100%', height: '100px', marginBottom: '20px', padding: '10px', borderRadius: '4px', border: '1px solid #ccc', boxSizing: 'border-box' }} placeholder="Detail the solution provided..." />
-                        
-                        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
-                            <button onClick={() => setSelectedTicket(null)} style={{ backgroundColor: '#6c757d', color: 'white', border: 'none', padding: '10px 20px', borderRadius: '4px', cursor: 'pointer' }}>Cancel</button>
-                            <button onClick={handleUpdate} style={{ backgroundColor: '#28a745', color: 'white', border: 'none', padding: '10px 20px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}>Save Changes</button>
-                        </div>
                     </div>
+
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <span style={{ fontSize: '14px', fontWeight: '600', color: '#374151' }}>Priority</span>
+                        <select 
+                            value={filterPriority} 
+                            onChange={(e) => setFilterPriority(e.target.value)} 
+                            style={{ padding: '8px 30px 8px 12px', borderRadius: '6px', border: '1px solid #d1d5db', outline: 'none', fontSize: '14px', color: '#374151', cursor: 'pointer', backgroundColor: 'white' }}
+                        >
+                            <option value="All">All</option>
+                            <option value="HIGH">High</option>
+                            <option value="MEDIUM">Medium</option>
+                            <option value="LOW">Low</option>
+                        </select>
+                    </div>
+
+                    <Link to="/create" style={{ textDecoration: 'none' }}>
+                        <button style={{ 
+                            display: 'flex', alignItems: 'center', gap: '8px', 
+                            backgroundColor: '#2563eb', color: 'white', 
+                            padding: '10px 20px', borderRadius: '6px', 
+                            border: 'none', cursor: 'pointer', 
+                            fontSize: '14px', fontWeight: '600',
+                            transition: 'background-color 0.2s'
+                        }}>
+                            <FiPlus size={18} /> Create Ticket
+                        </button>
+                    </Link>
                 </div>
-            )}
+            </div>
+
+            {/* Ticket Table */}
+            <div style={{ backgroundColor: 'white', borderRadius: '8px', border: '1px solid #e5e7eb', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', overflow: 'hidden' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                    <thead>
+                        <tr style={{ borderBottom: '1px solid #e5e7eb', backgroundColor: '#ffffff' }}>
+                            <th style={thStyle}>Ticket ID</th>
+                            <th style={thStyle}>Category</th>
+                            <th style={thStyle}>Subject</th>
+                            <th style={thStyle}>Priority</th>
+                            <th style={thStyle}>Status</th>
+                            <th style={thStyle}>Created At</th>
+                            <th style={{...thStyle, width: '40px'}}></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {filteredTickets.length > 0 ? (
+                            filteredTickets.map(ticket => {
+                                const { date, time } = formatDateTime(ticket.createdAt);
+                                return (
+                                    <tr 
+                                        key={ticket.id} 
+                                        onClick={() => navigate(`/ticket/${ticket.id}`)}
+                                        style={{ 
+                                            borderBottom: '1px solid #f3f4f6', 
+                                            cursor: 'pointer',
+                                            transition: 'background-color 0.15s'
+                                        }}
+                                        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f9fafb'}
+                                        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                                    >
+                                        <td style={{ ...tdStyle, fontWeight: '700' }}>
+                                            {formatId(ticket.id)}
+                                        </td>
+                                        <td style={{ ...tdStyle, color: '#2563eb', fontWeight: '600' }}>
+                                            {ticket.category || "General"}
+                                        </td>
+                                        <td style={{ ...tdStyle, maxWidth: '250px' }}>
+                                            <div style={{ fontWeight: '600', marginBottom: '4px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                                {ticket.title || "No Subject"}
+                                            </div>
+                                            <div style={{ fontSize: '13px', color: '#6b7280', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                                {ticket.location || "No Location"}
+                                            </div>
+                                        </td>
+                                        <td style={tdStyle}>
+                                            <span style={getPriorityStyle(ticket.priority)}>
+                                                {ticket.priority?.toUpperCase() || "LOW"}
+                                            </span>
+                                        </td>
+                                        <td style={tdStyle}>
+                                            <span style={getStatusStyle(ticket.status)}>
+                                                {ticket.status?.replace('_', ' ') || "OPEN"}
+                                            </span>
+                                        </td>
+                                        <td style={tdStyle}>
+                                            <div style={{ fontWeight: '500', marginBottom: '2px', color: '#374151' }}>{date}</div>
+                                            <div style={{ fontSize: '12px', color: '#6b7280' }}>{time}</div>
+                                        </td>
+                                        <td style={{ padding: '16px 20px', color: '#9ca3af', textAlign: 'right' }}>
+                                            <FiChevronRight size={20} />
+                                        </td>
+                                    </tr>
+                                );
+                            })
+                        ) : (
+                            <tr>
+                                <td colSpan="7" style={{ padding: '40px', textAlign: 'center', color: '#6b7280', fontSize: '14px' }}>
+                                    No tickets found matching your search criteria.
+                                </td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
+            </div>
+
         </div>
     );
 };

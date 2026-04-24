@@ -1,6 +1,7 @@
 package com.smartcampus.backend.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.ArrayList;
@@ -13,9 +14,13 @@ public class Ticket {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "Title is required")
     private String title; // අලුතින් එකතු කළා
+    
+    @NotBlank(message = "Category is required")
     private String category;
     
+    @NotBlank(message = "Description is required")
     @Column(length = 1000)
     private String description;
 
@@ -25,17 +30,29 @@ public class Ticket {
     @Enumerated(EnumType.STRING)
     private Status status = Status.OPEN;
 
+    @NotBlank(message = "Location is required")
     private String location;
+    
+    @NotBlank(message = "Contact details are required")
     private String contactDetails;
+    
     private String assignedTechnicianId;
 
     @Column(length = 2000)
     private String resolutionNotes;
+    
+    @Column(length = 1000)
+    private String rejectionReason;
 
     @ElementCollection
     private List<String> attachmentUrls = new ArrayList<>();
 
+    @Transient
+    private boolean overdue;
+
     private LocalDateTime createdAt = LocalDateTime.now(); // SLA timer එකට අවශ්‍යයි
+    private LocalDateTime firstRespondedAt;
+    private LocalDateTime resolvedAt;
 
     // --- Enum Types ---
     public enum Priority { LOW, MEDIUM, HIGH }
@@ -44,7 +61,7 @@ public class Ticket {
     // --- Constructors ---
     public Ticket() {}
 
-    public Ticket(Long id, String title, String category, String description, Priority priority, Status status, String location, String contactDetails, String assignedTechnicianId, String resolutionNotes, List<String> attachmentUrls) {
+    public Ticket(Long id, String title, String category, String description, Priority priority, Status status, String location, String contactDetails, String assignedTechnicianId, String resolutionNotes, String rejectionReason, List<String> attachmentUrls, LocalDateTime createdAt, LocalDateTime firstRespondedAt, LocalDateTime resolvedAt) {
         this.id = id;
         this.title = title;
         this.category = category;
@@ -55,7 +72,11 @@ public class Ticket {
         this.contactDetails = contactDetails;
         this.assignedTechnicianId = assignedTechnicianId;
         this.resolutionNotes = resolutionNotes;
+        this.rejectionReason = rejectionReason;
         this.attachmentUrls = attachmentUrls;
+        if(createdAt != null) this.createdAt = createdAt;
+        this.firstRespondedAt = firstRespondedAt;
+        this.resolvedAt = resolvedAt;
     }
 
     // --- Getters and Setters ---
@@ -94,4 +115,24 @@ public class Ticket {
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+    
+    public String getRejectionReason() { return rejectionReason; }
+    public void setRejectionReason(String rejectionReason) { this.rejectionReason = rejectionReason; }
+
+    public LocalDateTime getFirstRespondedAt() { return firstRespondedAt; }
+    public void setFirstRespondedAt(LocalDateTime firstRespondedAt) { this.firstRespondedAt = firstRespondedAt; }
+
+    public LocalDateTime getResolvedAt() { return resolvedAt; }
+    public void setResolvedAt(LocalDateTime resolvedAt) { this.resolvedAt = resolvedAt; }
+    
+    public boolean isOverdue() {
+        if (this.priority == Priority.HIGH && this.status != Status.RESOLVED && this.status != Status.CLOSED && this.status != Status.REJECTED) {
+            if (this.firstRespondedAt == null) {
+                if (this.createdAt != null && this.createdAt.plusHours(2).isBefore(LocalDateTime.now())) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }
