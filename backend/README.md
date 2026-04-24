@@ -103,3 +103,5 @@ Edit `src/main/resources/application.properties` to configure:
 <!-- perf: optimize database queries for bookings -->
 
 <!-- test: add unit tests for notification service -->
+
+<!-- ci: update GitHub actions workflow -->
