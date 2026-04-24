@@ -105,3 +105,5 @@ Edit `src/main/resources/application.properties` to configure:
 <!-- test: add unit tests for notification service -->
 
 <!-- ci: update GitHub actions workflow -->
+
+<!-- fix: resolve UI overlap in ticket form -->
