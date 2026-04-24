@@ -15,7 +15,7 @@ public class Ticket {
     private Long id;
 
     @NotBlank(message = "Title is required")
-    private String title; // අලුතින් එකතු කළා
+    private String title; 
     
     @NotBlank(message = "Category is required")
     private String category;
@@ -50,7 +50,7 @@ public class Ticket {
     @Transient
     private boolean overdue;
 
-    private LocalDateTime createdAt = LocalDateTime.now(); // SLA timer එකට අවශ්‍යයි
+    private LocalDateTime createdAt = LocalDateTime.now(); // SLA timer 
     private LocalDateTime firstRespondedAt;
     private LocalDateTime resolvedAt;
 

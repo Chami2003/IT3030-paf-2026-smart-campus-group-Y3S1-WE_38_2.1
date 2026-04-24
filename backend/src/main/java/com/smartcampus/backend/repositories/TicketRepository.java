@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TicketRepository extends JpaRepository<Ticket, Long> {
-    // මූලික Database වැඩ (Save, Delete, Find) ඔක්කොම JpaRepository එකෙන් ලැබෙනවා.
+    // basic Database (Save, Delete, Find) JpaRepository 
 }

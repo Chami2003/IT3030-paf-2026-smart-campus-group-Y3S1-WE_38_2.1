@@ -21,7 +21,7 @@ public class TicketController {
     private TicketService ticketService;
 
     // 1. Create Ticket with Images (POST)
-    // Consumes multipart/form-data භාවිතා කර පින්තූර සහ දත්ත භාර ගනී
+    // Consumes multipart/form-data
     @PostMapping(consumes = {"multipart/form-data"})
     public ResponseEntity<Ticket> create(
         @Valid @RequestPart("ticket") Ticket ticket, 
