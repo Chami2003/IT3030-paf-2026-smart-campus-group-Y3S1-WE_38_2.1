@@ -97,3 +97,5 @@ Edit `src/main/resources/application.properties` to configure:
 <!-- style: update CSS variables for dashboard -->
 
 <!-- docs: update API endpoints documentation -->
+
+<!-- chore: clean up redundant dependencies -->
