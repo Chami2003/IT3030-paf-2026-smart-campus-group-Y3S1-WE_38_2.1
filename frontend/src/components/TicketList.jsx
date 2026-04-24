@@ -77,8 +77,8 @@ const TicketList = () => {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
                 
                 {/* Search Bar */}
-                <div style={{ position: 'relative', width: '280px' }}>
-                    <FiSearch style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#9ca3af' }} size={18} />
+                <div style={{ position: 'relative', width: '300px' }}>
+                    <FiSearch style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#6b7280' }} size={18} />
                     <input 
                         type="text" 
                         placeholder="Search tickets..." 
@@ -91,7 +91,9 @@ const TicketList = () => {
                             border: '1px solid #d1d5db', 
                             outline: 'none',
                             fontSize: '14px',
-                            boxSizing: 'border-box'
+                            boxSizing: 'border-box',
+                            backgroundColor: '#f9fafb',
+                            color: '#111827'
                         }}
                     />
                 </div>
@@ -103,7 +105,16 @@ const TicketList = () => {
                         <select 
                             value={filterStatus} 
                             onChange={(e) => setFilterStatus(e.target.value)} 
-                            style={{ padding: '8px 30px 8px 12px', borderRadius: '6px', border: '1px solid #d1d5db', outline: 'none', fontSize: '14px', color: '#374151', cursor: 'pointer', backgroundColor: 'white' }}
+                            style={{ 
+                                padding: '8px 12px', 
+                                borderRadius: '8px', 
+                                border: '1px solid #d1d5db', 
+                                outline: 'none', 
+                                fontSize: '14px', 
+                                color: '#111827', 
+                                cursor: 'pointer', 
+                                backgroundColor: '#f9fafb' 
+                            }}
                         >
                             <option value="All">All</option>
                             <option value="OPEN">Open</option>
@@ -119,7 +130,16 @@ const TicketList = () => {
                         <select 
                             value={filterPriority} 
                             onChange={(e) => setFilterPriority(e.target.value)} 
-                            style={{ padding: '8px 30px 8px 12px', borderRadius: '6px', border: '1px solid #d1d5db', outline: 'none', fontSize: '14px', color: '#374151', cursor: 'pointer', backgroundColor: 'white' }}
+                            style={{ 
+                                padding: '8px 12px', 
+                                borderRadius: '8px', 
+                                border: '1px solid #d1d5db', 
+                                outline: 'none', 
+                                fontSize: '14px', 
+                                color: '#111827', 
+                                cursor: 'pointer', 
+                                backgroundColor: '#f9fafb' 
+                            }}
                         >
                             <option value="All">All</option>
                             <option value="HIGH">High</option>

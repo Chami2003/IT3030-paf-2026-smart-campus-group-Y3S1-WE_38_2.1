@@ -167,20 +167,36 @@ const TechnicianDashboard = () => {
         </h1>
 
         <div style={{ display: 'flex', gap: '20px', alignItems: 'center', borderBottom: '1px solid #e5e7eb', paddingBottom: '20px' }}>
+          {/* Search Box */}
           <div style={{ position: 'relative', width: '300px' }}>
-            <FiSearch style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#9ca3af' }} size={16} />
+            <FiSearch style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#6b7280' }} size={16} />
             <input 
                 type="text" 
                 placeholder="Search tickets..." 
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                style={{ width: '100%', padding: '8px 10px 8px 36px', borderRadius: '6px', border: '1px solid #d1d5db', outline: 'none', fontSize: '13px', boxSizing: 'border-box' }}
+                style={{ 
+                  width: '100%', 
+                  padding: '8px 10px 8px 36px', 
+                  borderRadius: '6px', 
+                  border: '1px solid #d1d5db', 
+                  outline: 'none', 
+                  fontSize: '13px', 
+                  boxSizing: 'border-box',
+                  backgroundColor: '#f9fafb',
+                  color: '#111827'
+                }}
             />
           </div>
 
+          {/* Status Filter */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <span style={{ fontSize: '13px', fontWeight: '600', color: '#374151' }}>Status</span>
-            <select value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)} style={{ padding: '6px 12px', borderRadius: '6px', border: '1px solid #d1d5db', outline: 'none', fontSize: '13px', backgroundColor: 'white' }}>
+            <select 
+              value={filterStatus} 
+              onChange={(e) => setFilterStatus(e.target.value)} 
+              style={{ padding: '8px 12px', borderRadius: '6px', border: '1px solid #d1d5db', outline: 'none', fontSize: '13px', backgroundColor: '#f9fafb', color: '#111827', cursor: 'pointer' }}
+            >
               <option value="All">All</option>
               <option value="OPEN">Open</option>
               <option value="IN_PROGRESS">In Progress</option>
@@ -189,9 +205,14 @@ const TechnicianDashboard = () => {
             </select>
           </div>
 
+          {/* Priority Filter */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <span style={{ fontSize: '13px', fontWeight: '600', color: '#374151' }}>Priority</span>
-            <select value={filterPriority} onChange={(e) => setFilterPriority(e.target.value)} style={{ padding: '6px 12px', borderRadius: '6px', border: '1px solid #d1d5db', outline: 'none', fontSize: '13px', backgroundColor: 'white' }}>
+            <select 
+              value={filterPriority} 
+              onChange={(e) => setFilterPriority(e.target.value)} 
+              style={{ padding: '8px 12px', borderRadius: '6px', border: '1px solid #d1d5db', outline: 'none', fontSize: '13px', backgroundColor: '#f9fafb', color: '#111827', cursor: 'pointer' }}
+            >
               <option value="All">All</option>
               <option value="HIGH">High</option>
               <option value="MEDIUM">Medium</option>
