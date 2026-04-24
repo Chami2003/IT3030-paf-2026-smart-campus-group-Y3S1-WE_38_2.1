@@ -55,6 +55,15 @@ export const userAPI = {
 };
 
 
+export const resourceAPI = {
+  getAllResources: () => apiClient.get('/resources'),
+  getResourceById: (id) => apiClient.get(`/resources/${id}`),
+  searchResources: (params) => apiClient.get('/resources/search', { params }),
+  createResource: (resourceData) => apiClient.post('/resources', resourceData),
+  updateResource: (id, resourceData) => apiClient.put(`/resources/${id}`, resourceData),
+  deleteResource: (id) => apiClient.delete(`/resources/${id}`),
+};
+
 export const facilityAPI = {
   getAllFacilities: () => apiClient.get('/facilities'),
   getFacilityDetails: (facilityId) => apiClient.get(`/facilities/${facilityId}`),

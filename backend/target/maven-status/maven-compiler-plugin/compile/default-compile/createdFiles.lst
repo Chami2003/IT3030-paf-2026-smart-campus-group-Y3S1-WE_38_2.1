@@ -1,0 +1,4 @@
+com\smartcampus\SmartCampusApplication.class
+com\smartcampus\models\Resource.class
+com\smartcampus\controllers\ResourceController.class
+com\smartcampus\repositories\ResourceRepository.class

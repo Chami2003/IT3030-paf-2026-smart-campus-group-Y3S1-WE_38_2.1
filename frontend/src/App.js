@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 import Navigation from './components/Navigation';
 import Header from './components/Header';
+import ResourceCatalogue from './components/ResourceCatalogue';
 
 
 function App() {
@@ -52,13 +53,34 @@ function App() {
         <div className="container">
           {isAuthenticated ? (
             <div className="dashboard">
-              <h1>Welcome to Smart Campus</h1>
-              <p>Select an option from the navigation menu</p>
+              {window.location.pathname === '/resources' ? (
+                <ResourceCatalogue />
+              ) : (
+                <>
+                  <h1>Welcome to Smart Campus</h1>
+                  <p>Select an option from the navigation menu</p>
+                </>
+              )}
             </div>
           ) : (
             <div className="login-page">
               <h1>Please Log In</h1>
               <p>Log in to access Smart Campus services</p>
+              <button 
+                onClick={() => handleLogin({name: 'Test User'})}
+                style={{
+                  padding: '10px 20px', 
+                  marginTop: '15px', 
+                  background: '#6366f1', 
+                  color: 'white', 
+                  border: 'none', 
+                  borderRadius: '5px',
+                  cursor: 'pointer',
+                  fontWeight: 'bold'
+                }}
+              >
+                Login for Testing
+              </button>
             </div>
           )}
         </div>
