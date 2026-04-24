@@ -39,10 +39,15 @@ const ResourceForm = ({ resource, onClose, onSave }) => {
   /** Handle input changes */
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormData({
+    const updatedData = {
       ...formData,
       [name]: type === 'checkbox' ? checked : value
-    });
+    };
+    // Auto-set capacity to 1 when switching to Equipment (no seating capacity)
+    if (name === 'type' && value === 'EQUIPMENT') {
+      updatedData.capacity = 1;
+    }
+    setFormData(updatedData);
     if (errors[name]) {
       setErrors({ ...errors, [name]: null });
     }
@@ -54,7 +59,8 @@ const ResourceForm = ({ resource, onClose, onSave }) => {
     if (!formData.name.trim()) newErrors.name = 'Name is required';
     if (!formData.location.trim()) newErrors.location = 'Location is required';
     if (!formData.availabilityWindows.trim()) newErrors.availabilityWindows = 'Availability windows are required';
-    if (formData.capacity < 1) newErrors.capacity = 'Capacity must be at least 1';
+    // Skip capacity validation for Equipment type
+    if (formData.type !== 'EQUIPMENT' && formData.capacity < 1) newErrors.capacity = 'Capacity must be at least 1';
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -147,22 +153,24 @@ const ResourceForm = ({ resource, onClose, onSave }) => {
             </div>
           </div>
 
-          {/* Row 2: Capacity, Location */}
+          {/* Row 2: Capacity (hidden for Equipment), Location */}
           <div className="form-row">
-            <div className="form-group">
-              <label className="form-label">
-                <span className="label-icon">👥</span> Capacity
-              </label>
-              <input
-                type="number"
-                name="capacity"
-                className="form-control"
-                value={formData.capacity}
-                onChange={handleChange}
-                min="1"
-              />
-              {errors.capacity && <div className="error-message">{errors.capacity}</div>}
-            </div>
+            {formData.type !== 'EQUIPMENT' && (
+              <div className="form-group">
+                <label className="form-label">
+                  <span className="label-icon">👥</span> Capacity
+                </label>
+                <input
+                  type="number"
+                  name="capacity"
+                  className="form-control"
+                  value={formData.capacity}
+                  onChange={handleChange}
+                  min="1"
+                />
+                {errors.capacity && <div className="error-message">{errors.capacity}</div>}
+              </div>
+            )}
             <div className="form-group">
               <label className="form-label">
                 <span className="label-icon">📍</span> Location
