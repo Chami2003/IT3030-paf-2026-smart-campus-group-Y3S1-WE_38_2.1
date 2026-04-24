@@ -24,6 +24,12 @@ This project aims to create an intelligent campus management system that streaml
 └── .github/          - CI/CD workflows
 ```
 
+## Special Features
+
+- **OAuth 2.0 Integration**: Secure user authentication via Google OAuth 2.0.
+- **Role Management**: Comprehensive role-based access control (ADMIN/USER) managing application modules.
+- **Notification Center**: Real-time updates and notification management for end-users.
+
 ## Getting Started
 
 ### Prerequisites

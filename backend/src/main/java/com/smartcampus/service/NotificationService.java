@@ -1,14 +1,29 @@
 package com.smartcampus.service;
 
+import com.smartcampus.entity.Notification;
+import com.smartcampus.entity.User;
+import com.smartcampus.repository.NotificationRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import java.time.LocalDateTime;
 import java.util.logging.Logger;
 
 @Service
 public class NotificationService {
     private static final Logger logger = Logger.getLogger(NotificationService.class.getName());
 
-    public void sendNotification(String userId, String message) {
-        // Implementation for sending notifications (Email/Push/SMS)
-        logger.info("Sending notification to " + userId + ": " + message);
+    @Autowired
+    private NotificationRepository notificationRepository;
+
+    public void sendNotification(User user, String message) {
+        Notification notification = Notification.builder()
+                .user(user)
+                .message(message)
+                .createdAt(LocalDateTime.now())
+                .isRead(false)
+                .build();
+
+        notificationRepository.save(notification);
+        logger.info("Saved notification for user " + user.getEmail() + ": " + message);
     }
 }

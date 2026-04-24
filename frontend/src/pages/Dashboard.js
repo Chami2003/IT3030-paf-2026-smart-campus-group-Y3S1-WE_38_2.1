@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Notifications from '../components/Notifications';
 import './Dashboard.css';
 
 function Dashboard({ user }) {
   const [typedText, setTypedText] = useState('');
   const fullText = `Welcome, ${user?.name || 'User'}!`;
+  const navigate = useNavigate();
 
   useEffect(() => {
     let currentText = '';
@@ -40,25 +42,25 @@ function Dashboard({ user }) {
           <div className="module-card">
             <h3>Facilities & Assets</h3>
             <p>View and manage campus resources</p>
-            <button>Go to Facilities</button>
+            <button onClick={() => navigate('/resources')}>Go to Facilities</button>
           </div>
 
           <div className="module-card">
             <h3>Bookings</h3>
             <p>Manage your bookings</p>
-            <button>Go to Bookings</button>
+            <button onClick={() => navigate('/bookings/my')}>Go to Bookings</button>
           </div>
 
           <div className="module-card">
             <h3>Support Tickets</h3>
             <p>Report and track issues</p>
-            <button>Go to Tickets</button>
+            <button onClick={() => navigate('/tickets')}>Go to Tickets</button>
           </div>
 
           <div className="module-card">
             <h3>Notifications</h3>
             <p>View your notifications</p>
-            <button>Go to Notifications</button>
+            <button onClick={() => navigate('/notifications')}>Go to Notifications</button>
           </div>
         </div>
       </main>

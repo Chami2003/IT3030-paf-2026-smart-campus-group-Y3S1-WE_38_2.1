@@ -3,7 +3,6 @@ import { createContext, useContext, useState } from 'react';
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
-  // Initial state from localStorage if available
   const [user, setUser] = useState(() => {
     const savedUser = localStorage.getItem('hub_user');
     return savedUser ? JSON.parse(savedUser) : null;
@@ -15,19 +14,37 @@ export const AuthProvider = ({ children }) => {
       name: role === 'ADMIN' ? 'Admin User' : 'Standard User',
       email: role === 'ADMIN' ? 'admin@campus.edu' : 'user@campus.edu',
       role: role,
+      roles: [role],
       token: `mock-jwt-token-${role.toLowerCase()}`
     };
-    setUser(mockUser);
-    localStorage.setItem('hub_user', JSON.stringify(mockUser));
+    setAuth(mockUser, mockUser.token);
+  };
+
+  const setAuth = (userData, token) => {
+    const userWithRole = {
+      ...userData,
+      role: userData.role || (userData.roles && userData.roles.includes('ADMIN') ? 'ADMIN' : 'USER')
+    };
+    setUser(userWithRole);
+    localStorage.setItem('hub_user', JSON.stringify(userWithRole));
+    localStorage.setItem('jwtToken', token);
   };
 
   const logout = () => {
     setUser(null);
     localStorage.removeItem('hub_user');
+    localStorage.removeItem('jwtToken');
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, isAdmin: user?.role === 'ADMIN' }}>
+    <AuthContext.Provider value={{ 
+      user, 
+      isAuthenticated: !!user,
+      login, 
+      logout, 
+      setAuth,
+      isAdmin: user?.role === 'ADMIN' || user?.roles?.includes('ADMIN')
+    }}>
       {children}
     </AuthContext.Provider>
   );

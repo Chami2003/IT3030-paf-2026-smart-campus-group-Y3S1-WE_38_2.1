@@ -10,6 +10,7 @@ import Header from './components/Header';
 import ResourceCatalogue from './components/ResourceCatalogue';
 import ResourceAnalytics from './components/ResourceAnalytics';
 import NotificationCenter from './components/NotificationCenter';
+import { useAuth } from './context/AuthContext';
 
 // Ticketing Components
 import TicketList from './components/TicketList';
@@ -27,8 +28,7 @@ import './App.css';
 import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [user, setUser] = useState(null);
+  const { user, isAuthenticated, setAuth, logout: contextLogout } = useAuth();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -45,17 +45,20 @@ function App() {
           }
         });
         if (response.ok) {
-          setIsAuthenticated(true);
-          const userData = JSON.parse(localStorage.getItem('user'));
-          setUser(userData);
+          // Keep the existing user data if it's already in state, 
+          // otherwise try to load from localStorage
+          if (!user) {
+            const savedUser = localStorage.getItem('hub_user');
+            if (savedUser) {
+              setAuth(JSON.parse(savedUser), token);
+            }
+          }
         } else {
-          localStorage.removeItem('jwtToken');
-          localStorage.removeItem('user');
+          contextLogout();
         }
       } catch (error) {
         console.error('Token verification failed:', error);
-        localStorage.removeItem('jwtToken');
-        localStorage.removeItem('user');
+        contextLogout();
       }
     }
     setLoading(false);
@@ -75,10 +78,7 @@ function App() {
     } catch (error) {
       console.error('Logout error:', error);
     } finally {
-      localStorage.removeItem('jwtToken');
-      localStorage.removeItem('user');
-      setIsAuthenticated(false);
-      setUser(null);
+      contextLogout();
       window.location.href = '/login';
     }
   };

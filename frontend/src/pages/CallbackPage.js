@@ -1,7 +1,9 @@
 import React, { useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 function CallbackPage() {
+  const { setAuth } = useAuth();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
@@ -21,8 +23,7 @@ function CallbackPage() {
         return response.json();
       })
       .then(data => {
-        localStorage.setItem('jwtToken', token);
-        localStorage.setItem('user', JSON.stringify(data));
+        setAuth(data, token);
         navigate('/dashboard');
       })
       .catch(error => {
@@ -32,7 +33,7 @@ function CallbackPage() {
     } else {
       navigate('/login');
     }
-  }, [searchParams, navigate]);
+  }, [searchParams, navigate, setAuth]);
 
   return (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>

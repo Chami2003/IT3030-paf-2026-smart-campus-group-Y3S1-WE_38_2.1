@@ -26,9 +26,8 @@ public class User {
     @Column(unique = true)
     private String googleId;
 
-    @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
-    private Set<Role> roles = new HashSet<>();
+    private Role role;
 
     private boolean enabled = true;
 
@@ -43,7 +42,7 @@ public class User {
         this.name = name;
         this.picture = picture;
         this.googleId = googleId;
-        this.roles.add(Role.USER);
+        this.role = Role.USER;
         this.createdAt = System.currentTimeMillis();
         this.updatedAt = System.currentTimeMillis();
     }

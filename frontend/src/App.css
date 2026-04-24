@@ -325,47 +325,7 @@
   font-size: 0.95rem;
 }
 
-/* ---------- Login Page ---------- */
-.login-page {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 60vh;
-  text-align: center;
-}
-
-.login-page h1 {
-  font-size: 2.5rem;
-  font-weight: 800;
-  color: var(--accent-blue);
-  margin-bottom: 0.75rem;
-  letter-spacing: -0.02em;
-}
-
-.login-page p {
-  color: var(--text-secondary);
-  margin-bottom: 2rem;
-  font-size: 1rem;
-}
-
-.login-page button {
-  background: var(--gradient-blue) !important;
-  color: white !important;
-  border: none !important;
-  padding: 0.9rem 3rem !important;
-  border-radius: var(--radius-md) !important;
-  font-weight: 700 !important;
-  font-size: 0.95rem !important;
-  transition: all var(--transition-normal) !important;
-  box-shadow: 0 4px 24px rgba(79, 143, 247, 0.3) !important;
-  letter-spacing: 0.02em !important;
-}
-
-.login-page button:hover {
-  transform: translateY(-3px) !important;
-  box-shadow: 0 8px 36px rgba(79, 143, 247, 0.45) !important;
-}
+/* Login page is fully self-contained in Login.css */
 
 /* ---------- Loading ---------- */
 .loading {

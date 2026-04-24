@@ -3,6 +3,7 @@ package com.smartcampus.security;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -12,7 +13,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -31,10 +34,14 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                 Set<String> roles = tokenProvider.getRolesFromToken(token);
                 
                 if (email != null) {
+                    List<SimpleGrantedAuthority> authorities = roles.stream()
+                            .map(role -> new SimpleGrantedAuthority(role.startsWith("ROLE_") ? role : "ROLE_" + role))
+                            .collect(Collectors.toList());
+                            
                     UsernamePasswordAuthenticationToken auth = 
-                            new UsernamePasswordAuthenticationToken(email, null, null);
+                            new UsernamePasswordAuthenticationToken(email, null, authorities);
                     SecurityContextHolder.getContext().setAuthentication(auth);
-                    log.debug("Set user authentication for email: {}", email);
+                    log.debug("Set user authentication for email: {} with roles: {}", email, roles);
                 }
             }
         } catch (Exception ex) {

@@ -24,9 +24,10 @@ This project implements a complete OAuth 2.0 authentication system using Google 
 3. Enable Google+ API
 4. Go to Credentials → Create OAuth 2.0 Client ID
    - Type: Web application
-   - Authorized redirect URIs:
-     - `http://localhost:8080/oauth2/callback`
+   - Authorized JavaScript origins:
      - `http://localhost:3000`
+   - Authorized redirect URIs:
+     - `http://localhost:8080/login/oauth2/code/google`
 5. Copy your **Client ID** and **Client Secret**
 
 ### Step 2: Backend Setup
@@ -180,7 +181,7 @@ REACT_APP_API_BASE_URL=http://localhost:8080
 
 ### Redirect URI Mismatch Error
 - Check Google Cloud Console for correct redirect URIs
-- Ensure `oauth2/callback` endpoint is accessible
+- Ensure `http://localhost:8080/login/oauth2/code/google` is added to redirect URIs
 
 ### CORS Errors
 - Verify CORS configuration in `WebMvcConfig.java`
