@@ -216,7 +216,7 @@
 .logout-btn:hover {
   background: var(--accent-red-bg);
   color: var(--accent-red);
-  border-color: rgba(239, 68, 68, 0.3);
+  border-color: rgba(239, 68, 68, 0.21);
 }
 
 .guest-info span {
@@ -244,14 +244,14 @@
   width: 100%;
 }
 
-.dashboard > h1 {
+.dashboard>h1 {
   font-size: 1.75rem;
   font-weight: 700;
   color: var(--text-heading);
   margin-bottom: 0.5rem;
 }
 
-.dashboard > p {
+.dashboard>p {
   color: var(--text-secondary);
   font-size: 0.95rem;
 }
