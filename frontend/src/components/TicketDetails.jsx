@@ -1,11 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { FiArrowLeft, FiChevronDown, FiEdit2, FiTrash2, FiUser } from 'react-icons/fi';
+import { FiArrowLeft, FiChevronDown, FiEdit2, FiTrash2, FiUser, FiDownload } from 'react-icons/fi';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
 const TicketDetails = () => {
     const { id } = useParams();
     const navigate = useNavigate();
+    const reportRef = useRef();
     const [ticket, setTicket] = useState(null);
     const [history, setHistory] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -130,6 +133,32 @@ const TicketDetails = () => {
         }
     };
 
+    const handleDownloadPDF = async () => {
+        const element = reportRef.current;
+        element.style.display = 'block'; // Temporarily show
+        
+        try {
+            const canvas = await html2canvas(element, {
+                scale: 2,
+                logging: false,
+                useCORS: true
+            });
+            const imgData = canvas.toDataURL('image/png');
+            const pdf = new jsPDF('p', 'mm', 'a4');
+            const imgProps = pdf.getImageProperties(imgData);
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+            
+            pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+            pdf.save(`Ticket_Report_${formatId(ticket.id)}.pdf`);
+        } catch (error) {
+            console.error("Error generating PDF", error);
+            alert("Failed to generate PDF report.");
+        } finally {
+            element.style.display = 'none'; // Hide again
+        }
+    };
+
     const formatId = (id) => `TKT-2026-${String(id).padStart(3, '0')}`;
 
     const formatDateTime = (isoString) => {
@@ -166,6 +195,87 @@ const TicketDetails = () => {
     return (
         <div style={{ width: '100%', boxSizing: 'border-box', margin: '0', padding: '30px', fontFamily: 'Inter, system-ui, sans-serif', backgroundColor: '#fafafa', minHeight: '100vh' }}>
             
+            {/* PDF Report Template (Hidden) */}
+            <div ref={reportRef} style={{ 
+                display: 'none', 
+                width: '210mm', 
+                minHeight: '297mm', 
+                padding: '20mm', 
+                backgroundColor: 'white', 
+                color: '#333', 
+                position: 'absolute', 
+                left: '-9999px',
+                fontFamily: 'Arial, sans-serif'
+            }}>
+                <div style={{ borderBottom: '2px solid #2563eb', paddingBottom: '10px', marginBottom: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div>
+                        <h1 style={{ color: '#2563eb', margin: 0, fontSize: '28px' }}>SMART CAMPUS</h1>
+                        <p style={{ margin: 0, fontSize: '12px', color: '#666' }}>OFFICIAL INCIDENT REPORT</p>
+                    </div>
+                    <div style={{ textAlign: 'right' }}>
+                        <div style={{ fontSize: '14px', fontWeight: 'bold' }}>{formatId(ticket.id)}</div>
+                        <div style={{ fontSize: '12px', color: '#666' }}>Generated: {new Date().toLocaleDateString()}</div>
+                    </div>
+                </div>
+
+                <h2 style={{ fontSize: '20px', borderBottom: '1px solid #eee', paddingBottom: '5px', marginBottom: '15px' }}>Ticket Information</h2>
+                <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: '25px' }}>
+                    <tbody>
+                        <tr>
+                            <td style={{ padding: '8px 0', fontWeight: 'bold', width: '30%' }}>Subject:</td>
+                            <td style={{ padding: '8px 0' }}>{ticket.title}</td>
+                        </tr>
+                        <tr>
+                            <td style={{ padding: '8px 0', fontWeight: 'bold' }}>Category:</td>
+                            <td style={{ padding: '8px 0' }}>{ticket.category}</td>
+                        </tr>
+                        <tr>
+                            <td style={{ padding: '8px 0', fontWeight: 'bold' }}>Priority:</td>
+                            <td style={{ padding: '8px 0' }}>{ticket.priority}</td>
+                        </tr>
+                        <tr>
+                            <td style={{ padding: '8px 0', fontWeight: 'bold' }}>Location:</td>
+                            <td style={{ padding: '8px 0' }}>{ticket.location}</td>
+                        </tr>
+                        <tr>
+                            <td style={{ padding: '8px 0', fontWeight: 'bold' }}>Status:</td>
+                            <td style={{ padding: '8px 0' }}>{ticket.status}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h2 style={{ fontSize: '18px', borderBottom: '1px solid #eee', paddingBottom: '5px', marginBottom: '15px' }}>Resolution Details</h2>
+                <div style={{ marginBottom: '25px', padding: '15px', backgroundColor: '#f9fafb', borderRadius: '8px' }}>
+                    <p style={{ margin: '0 0 10px 0' }}><strong>Technician:</strong> {ticket.assignedTechnicianId || 'System Assigned'}</p>
+                    <p style={{ margin: '0 0 5px 0' }}><strong>Resolution Notes:</strong></p>
+                    <p style={{ margin: 0, whiteSpace: 'pre-wrap', lineHeight: '1.5' }}>{ticket.resolutionNotes || 'No resolution notes provided.'}</p>
+                </div>
+
+                <h2 style={{ fontSize: '18px', borderBottom: '1px solid #eee', paddingBottom: '5px', marginBottom: '15px' }}>Audit Trail (History)</h2>
+                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px' }}>
+                    <thead>
+                        <tr style={{ backgroundColor: '#f3f4f6' }}>
+                            <th style={{ textAlign: 'left', padding: '8px', border: '1px solid #eee' }}>Timestamp</th>
+                            <th style={{ textAlign: 'left', padding: '8px', border: '1px solid #eee' }}>Action</th>
+                            <th style={{ textAlign: 'left', padding: '8px', border: '1px solid #eee' }}>Changed By</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {history.map((h, i) => (
+                            <tr key={i}>
+                                <td style={{ padding: '8px', border: '1px solid #eee' }}>{formatDateTime(h.timestamp)}</td>
+                                <td style={{ padding: '8px', border: '1px solid #eee' }}>{h.actionDescription}</td>
+                                <td style={{ padding: '8px', border: '1px solid #eee' }}>{h.changedBy}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+
+                <div style={{ marginTop: '40px', paddingTop: '20px', borderTop: '1px solid #eee', textAlign: 'center', fontSize: '10px', color: '#999' }}>
+                    This is an electronically generated report from the Smart Campus Operations Hub.
+                </div>
+            </div>
+
             {/* Mock User Selector (Hidden in production, useful for dev) */}
             <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '10px', alignItems: 'center', gap: '10px', fontSize: '12px' }}>
                 <span style={{ color: '#6b7280' }}>Simulate User:</span>
@@ -186,14 +296,24 @@ const TicketDetails = () => {
                     </button>
                     <h1 style={{ margin: 0, fontSize: '24px', color: '#111827' }}>Ticket Details</h1>
                 </div>
-                {(currentUser.role === 'Technician' || currentUser.role === 'Admin') && (
-                    <button 
-                        onClick={() => setShowActionsModal(true)}
-                        style={{ display: 'flex', alignItems: 'center', gap: '8px', backgroundColor: '#2563eb', color: 'white', padding: '10px 20px', borderRadius: '6px', border: 'none', cursor: 'pointer', fontSize: '14px', fontWeight: '600' }}
-                    >
-                        Actions <FiChevronDown />
-                    </button>
-                )}
+                <div style={{ display: 'flex', gap: '12px' }}>
+                    {(ticket.status === 'RESOLVED' || ticket.status === 'CLOSED') && (
+                        <button 
+                            onClick={handleDownloadPDF}
+                            style={{ display: 'flex', alignItems: 'center', gap: '8px', backgroundColor: '#10b981', color: 'white', padding: '10px 20px', borderRadius: '6px', border: 'none', cursor: 'pointer', fontSize: '14px', fontWeight: '600' }}
+                        >
+                            <FiDownload /> Download PDF
+                        </button>
+                    )}
+                    {(currentUser.role === 'Technician' || currentUser.role === 'Admin') && (
+                        <button 
+                            onClick={() => setShowActionsModal(true)}
+                            style={{ display: 'flex', alignItems: 'center', gap: '8px', backgroundColor: '#2563eb', color: 'white', padding: '10px 20px', borderRadius: '6px', border: 'none', cursor: 'pointer', fontSize: '14px', fontWeight: '600' }}
+                        >
+                            Actions <FiChevronDown />
+                        </button>
+                    )}
+                </div>
             </div>
 
             {/* Two Column Layout */}
